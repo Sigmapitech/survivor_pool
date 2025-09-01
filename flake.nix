@@ -73,8 +73,13 @@
               nodejs
               typescript
             ];
+            back-deps = with pkgs; [
+              py-env
+              black
+              isort
+            ];
           in
-            [py-env] ++ front-deps;
+            [py-env] ++ front-deps ++ back-deps;
         };
     });
   };
