@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# generated pre-commit.yaml
+.pre-commit-config.yaml
