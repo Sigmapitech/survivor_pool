@@ -49,6 +49,7 @@
       default = let
         py-env = pkgs.python3.withPackages (p:
           with p; [
+            aiohttp
             aiocache
             fastapi
             isort

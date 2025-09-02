@@ -34,6 +34,8 @@ class Settings(BaseSettings):
         env_file=".env.dev" if "dev" in sys.argv else ".env.prod"
     )
 
+    jeb_api_auth: str
+
     @property
     def database_url(self) -> str:
         # TODO: rewrite this parser

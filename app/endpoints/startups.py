@@ -1,11 +1,22 @@
+import aiohttp
 from fastapi import APIRouter
+
+from ..config import settings
 
 router = APIRouter()
 
 
 @router.get("/")
 async def list_startup():
-    return {}
+    async with aiohttp.ClientSession() as session:
+        headers = {"X-Group-Authorization": settings.jeb_api_auth}
+
+        async with session.get(
+            "https://api.jeb-incubator.com/startups", headers=headers
+        ) as response:
+            res = await response.json()
+
+            return res
 
 
 @router.get("/{startup_id}")
