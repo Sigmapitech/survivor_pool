@@ -1,16 +1,14 @@
 from logging import getLogger
-from pathlib import Path
 from typing import Annotated
 
 from fastapi import Depends
 from sqlmodel import Session, create_engine
 
-from .config import settings
 from .model import SQLModel
 
 logger = getLogger(__name__)
 
-engine = create_engine(settings.database_url, echo=True)
+engine = create_engine("sqlite:///app.db", echo=True)
 
 
 def on_startup():
