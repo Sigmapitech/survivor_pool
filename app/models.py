@@ -32,7 +32,7 @@ class Founder(Base, TableNameProvider):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     startup_id = Column(Integer, ForeignKey("startup.id"), nullable=False)
-    startup = relationship("startup", back_populates="founder")
+    startup = relationship("Startup", back_populates="founders")
 
 
 class Investor(Base, TableNameProvider):
@@ -56,7 +56,7 @@ class News(Base, TableNameProvider):
     category = Column(String, nullable=True)
     startup_id = Column(Integer, ForeignKey("startup.id"), nullable=True)
     description = Column(Text, nullable=True)
-    startup = relationship("startup", back_populates="news")
+    startup = relationship("Startup", back_populates="news")
 
 
 class Partner(Base, TableNameProvider):
@@ -88,9 +88,9 @@ class Startup(Base, TableNameProvider):
     needs = Column(Text, nullable=True)
 
     founders = relationship(
-        "founder", back_populates="startup", cascade="all, delete-orphan"
+        "Founder", back_populates="startup", cascade="all, delete-orphan"
     )
-    news = relationship("news", back_populates="startup", cascade="all, delete-orphan")
+    news = relationship("News", back_populates="startup", cascade="all, delete-orphan")
 
 
 class User(Base, TableNameProvider):
