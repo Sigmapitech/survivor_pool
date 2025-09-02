@@ -30,3 +30,6 @@ survivor
 
 # generated pre-commit.yaml
 .pre-commit-config.yaml
+
+# app generated
+*.db
