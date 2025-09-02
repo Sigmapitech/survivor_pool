@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     jeb_api_auth: str
     jwt_secret: str
 
+    mail_user: str
+    mail_pass: str
+
     def configure_logging(self):
         logging.basicConfig(level=self.log_level.upper())
         logging.info(f"Logging level set to {self.log_level}")
