@@ -51,13 +51,17 @@
             aiocache
             aiohttp
             aiosqlite
+            bcrypt
+            email-validator
             fastapi
             fastapi
             fastapi-cli
             isort
             markdownify
+            passlib
             pydantic
             pydantic-settings
+            pyjwt
             python-dotenv
             ruff
             sqlmodel

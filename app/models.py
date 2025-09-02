@@ -96,6 +96,7 @@ class Startup(Base, TableNameProvider):
 class User(Base, TableNameProvider):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, nullable=False)
+    auth = Column(String, nullable=True)
     name = Column(String, nullable=False)
     role = Column(String, nullable=False)
     founder_id = Column(Integer, ForeignKey("founder.id"), nullable=True)
