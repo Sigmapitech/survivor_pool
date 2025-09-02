@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlmodel import Session, create_engine
 
-from .model import Base
+from .models import Base
 
 logger = getLogger(__name__)
 

@@ -6,7 +6,7 @@ from app.db import get_session
 from app.jeb_schema import StartupBase
 
 from ..config import settings
-from ..model import Startup
+from ..models import Startup
 
 router = APIRouter()
 
