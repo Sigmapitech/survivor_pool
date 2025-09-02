@@ -31,7 +31,6 @@
         }
         // activate [
           "black"
-          "isort"
           "trim-trailing-whitespace"
           "alejandra"
           "deadnix"
@@ -49,20 +48,20 @@
       default = let
         py-env = pkgs.python3.withPackages (p:
           with p; [
-            aiohttp
             aiocache
+            aiohttp
+            aiosqlite
             fastapi
+            fastapi
+            fastapi-cli
             isort
             markdownify
             pydantic
-            pymysql
             pydantic-settings
             python-dotenv
             ruff
             sqlmodel
             uvicorn
-            fastapi
-            fastapi-cli
           ]);
       in
         pkgs.mkShell {

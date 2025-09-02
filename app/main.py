@@ -5,20 +5,16 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from sqlmodel import Session
 
 from . import endpoints
-from .db import engine, on_startup
+from .db import init_db
 
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    on_startup()
-    with Session(engine) as session:
-        app.state.db = session
+    await init_db()
     yield
 
 

@@ -1,23 +1,28 @@
 from logging import getLogger
-from typing import Annotated
 
-from fastapi import Depends
-from sqlmodel import Session, create_engine
+from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
+                                    create_async_engine)
 
 from .models import Base
 
 logger = getLogger(__name__)
 
-engine = create_engine("sqlite:///app.db", echo=True)
+DATABASE_URL = "sqlite+aiosqlite:///app.db"
+
+engine = create_async_engine(DATABASE_URL, echo=True)
+
+async_session = async_sessionmaker(
+    bind=engine,
+    expire_on_commit=False,
+    class_=AsyncSession,
+)
 
 
-def on_startup():
-    Base.metadata.create_all(bind=engine)
-
-
-def get_session():
-    with Session(engine) as session:
+async def get_session():
+    async with async_session() as session:
         yield session
 
 
-DataBase = Annotated[Session, Depends(get_session)]
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)

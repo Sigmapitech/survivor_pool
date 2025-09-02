@@ -1,6 +1,7 @@
 import aiohttp
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_session
 from app.jeb_schema import StartupBase
@@ -12,8 +13,8 @@ router = APIRouter()
 
 
 @router.get("/")
-async def list_startup(db=Depends(get_session)):
-    result = db.execute(select(Startup))
+async def list_startup(db: AsyncSession = Depends(get_session)):
+    result = await db.execute(select(Startup))
     collected = result.scalars().all()
 
     if len(collected) > 0:
@@ -35,7 +36,7 @@ async def list_startup(db=Depends(get_session)):
 
             db.add(Startup(**startup.model_dump()))
 
-    db.commit()
+    await db.commit()
     return startups
 
 
