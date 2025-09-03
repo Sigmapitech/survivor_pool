@@ -40,5 +40,9 @@ def register_all(app: FastAPI):
         mod = importlib.import_module(f".{module}", package="app.endpoints")
         app.include_router(mod.router, prefix=f"/api/{module}", tags=[f"{module}"])
 
+    from ..helpers.caching_proxy import router as api_router
+
+    app.include_router(api_router)
+
 
 __all__ = ("register_all",)

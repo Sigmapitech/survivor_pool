@@ -15,6 +15,7 @@ class Settings(BaseSettings):
         env_file=".env.dev" if "dev" in sys.argv else ".env.prod"
     )
 
+    jeb_api_url: str
     jeb_api_auth: str
     jwt_secret: str
 
