@@ -1,7 +1,9 @@
+import logging
+import secrets
 from datetime import datetime, timedelta, timezone
 
 import jwt
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from passlib.hash import bcrypt
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,20 +11,26 @@ from sqlmodel import select
 
 from ..config import settings
 from ..db import get_session
+from ..helpers.html import render_template
+from ..helpers.mail import EmailSchema, send_email
 from ..models import User
+from ..proxy_schema import Message
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 ACCES_TOKEN_TIMEOUT = 42
+ALGORITHM = "HS256"
 
 
 def decode_access_token(token: str):
     try:
-        payload = jwt.decode(token, settings.jwt_secret)
+        payload = jwt.decode(token, settings.jwt_secret, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError:
+    except jwt.InvalidTokenError as e:
+        logger.warning(f"Invalid token {e}")
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
@@ -32,7 +40,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
         expires_delta or timedelta(minutes=ACCES_TOKEN_TIMEOUT)
     )
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.jwt_secret)
+    encoded_jwt = jwt.encode(to_encode, settings.jwt_secret, algorithm=ALGORITHM)
     return encoded_jwt
 
 
@@ -48,8 +56,35 @@ class RegisterRequest(BaseModel):
     role: str
 
 
+class VerificationRequest(BaseModel):
+    code: int
+
+
 class AuthResponse(BaseModel):
     token: str
+
+
+@router.post("/verify/")
+async def verify_user(
+    data: VerificationRequest,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
+) -> Message:
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="No token, authorization denied")
+
+    token = authorization.split(" ")[1]
+    payload: dict[str, int] = decode_access_token(token)
+    result = await db.execute(select(User).where(User.id == payload.get("id")))
+    user = result.scalar()
+    if user is None:
+        raise HTTPException(404, detail="User not found")
+    logger.warning(user.verification_code, data.code)
+    if user.verification_code != data.code:
+        raise HTTPException(400, "Verification code is incorrect")
+    user.verified_email = True
+    await db.commit()
+    return Message(message="Properly verified")
 
 
 @router.post(
@@ -88,23 +123,47 @@ class AuthResponse(BaseModel):
     },
 )
 async def register(data: RegisterRequest, db: AsyncSession = Depends(get_session)):
-    # TODO: Setup mail verification via SMTP
     result = await db.execute(select(User).filter(User.email == data.email))
     collected = result.scalars().all()
     if len(collected) > 0:
         raise HTTPException(status_code=400, detail="Account already exists")
 
+    code = secrets.randbelow(10**6)
     user = User(
         auth=bcrypt.hash(data.password),
         email=data.email,
         name=data.name,
         role=data.role,
+        verified_email=False,
+        verification_code=code,
     )
     db.add(user)
     await db.commit()
     await db.refresh(user)
 
     token = create_access_token({"id": user.id, "email": user.email})
+
+    body = render_template(
+        "app/templates/auth_verification.html",
+        verification_url=f"http://localhost:8000/api/auth/verify/",
+        verification_code=str(code).zfill(6),
+        verification_token=token,
+        current_year=datetime.now(timezone.utc).year,
+    )
+    if body is None:
+        await db.delete(user)
+        await db.commit()
+        raise HTTPException(
+            500, detail="Something went wrong when filling mail template"
+        )
+    await send_email(
+        EmailSchema(
+            to=str(user.email),
+            subject="Votre compte JEB - Confirmation de votre adresse mail",
+            body=body,
+        ),
+        content_type="html",
+    )
     return AuthResponse(token=token)
 
 

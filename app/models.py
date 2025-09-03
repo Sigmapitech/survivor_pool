@@ -1,7 +1,7 @@
 import logging
 import re
 
-from sqlalchemy import Column, Date, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Column, Date, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import declarative_base, relationship
 
 logger = logging.getLogger(__package__)
@@ -101,6 +101,8 @@ class User(Base, TableNameProvider):
     role = Column(String, nullable=False)
     founder_id = Column(Integer, ForeignKey("founder.id"), nullable=True)
     investor_id = Column(Integer, ForeignKey("investor.id"), nullable=True)
+    verified_email = Column(Boolean)
+    verification_code = Column(Integer)
 
 
 class HTTPValidationError(Base, TableNameProvider):

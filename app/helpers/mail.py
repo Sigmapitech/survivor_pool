@@ -33,7 +33,7 @@ class EmailSchema(BaseModel):
 
 
 def create_mail_message(
-    email: EmailSchema, attachment_paths: Sequence[Path] | None
+    email: EmailSchema, attachment_paths: Sequence[Path] | None, content_type: str
 ) -> MIMEMultipart:
     message = MIMEMultipart()
     message["From"] = settings.mail_user
@@ -41,7 +41,7 @@ def create_mail_message(
     message["Cc"] = ", ".join(email.cc or "")
     message["Bcc"] = ", ".join(email.bcc or "")
     message["Subject"] = email.subject
-    message.attach(MIMEText(email.body))
+    message.attach(MIMEText(email.body, content_type, "utf-8"))
 
     for path in attachment_paths or []:
         try:
@@ -55,9 +55,11 @@ def create_mail_message(
 
 
 async def send_email(
-    email: EmailSchema, attachment_paths: Sequence[Path] | None = None
+    email: EmailSchema,
+    attachment_paths: Sequence[Path] | None = None,
+    content_type: str = "plain",
 ):
-    message = create_mail_message(email, attachment_paths)
+    message = create_mail_message(email, attachment_paths, content_type)
     logger.debug(f"Prepared email: {message.as_string()}")
     try:
         with smtplib.SMTP_SSL(
