@@ -1,8 +1,9 @@
+import logging
 from functools import wraps
 from http import HTTPStatus
 
 import aiohttp
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_session
@@ -10,17 +11,44 @@ from app.db import get_session
 from ..config import settings
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 async def fetch_from_api(api_url: str, **kwargs):
     url = (settings.jeb_api_url + api_url).format(**kwargs)
-    async with aiohttp.ClientSession() as session:
-        async with session.get(
-            url, headers={"X-Group-Authorization": settings.jeb_api_auth}
-        ) as response:
-            print("@" * 999)
-            print(response.json())
-            return await response.json(), response.status
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                url, headers={"X-Group-Authorization": settings.jeb_api_auth}
+            ) as response:
+                logger.debug("@" * 999)
+                match response.content_type:
+                    case "application/json":
+                        logger.debug(await response.json())
+                        return await response.json(), response.status
+                    case "image/png":
+                        data = await response.read()
+                        return data, response.status
+                    case _:
+                        return (None, 500)
+
+    except Exception as e:
+        logger.error(e)
+        return ({"detail": f"External api call fail: {e}"}, 404)
+
+
+def get_image(api_url: str):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(**kwargs):
+            res, status = await fetch_from_api(api_url, **kwargs)
+            if status != HTTPStatus.OK.value:
+                raise HTTPException(status, detail=res)
+            return Response(content=res, media_type="image/png")
+
+        return router.get("/api" + api_url)(wrapper)
+
+    return decorator
 
 
 def cached_endpoint_inner(api_url: str, convert_in, convert_out):

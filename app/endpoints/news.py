@@ -2,9 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.helpers.caching_proxy import cached_endpoint, cached_list_endpoint
-
 from ..db import get_session
+from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint, get_image
 from ..jeb_schema import NewsBase
 from ..models import News
 
@@ -23,6 +22,7 @@ async def read_news(news_id: int, db: AsyncSession = Depends(get_session)):
     return result.scalars().first()
 
 
-@router.get("/{news_id}/image")
-async def get_news_image(news_id: int):
-    return {}
+@get_image("/news/{news_id}/image")
+async def get_news_image(
+    news_id: int,
+): ...  # The decorator does all so no need to complete this

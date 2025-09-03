@@ -2,9 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.helpers.caching_proxy import cached_endpoint, cached_list_endpoint
-
 from ..db import get_session
+from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint, get_image
 from ..jeb_schema import UserBase
 from ..models import User
 
@@ -23,9 +22,10 @@ async def read_user_by_id(user_id: int, db: AsyncSession = Depends(get_session))
     return result.scalars().first()
 
 
-@router.get("/{user_id}/image")
-async def get_user_image(user_id: int):
-    return {}
+@get_image("/users/{user_id}/image")
+async def get_user_image(
+    user_id: int,
+): ...  # The decorator does all so no need to complete this
 
 
 @cached_endpoint("/users/email/{email}", db_model=User, pydantic_model=UserBase)

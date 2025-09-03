@@ -2,9 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.helpers.caching_proxy import cached_endpoint, cached_list_endpoint
-
 from ..db import get_session
+from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint
 from ..jeb_schema import PartnerBase
 from ..models import Partner
 

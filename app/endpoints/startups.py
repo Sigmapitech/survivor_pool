@@ -2,10 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db import get_session
-from app.jeb_schema import StartupBase
-
-from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint
+from ..db import get_session
+from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint, get_image
+from ..jeb_schema import StartupBase
 from ..models import Startup
 
 router = APIRouter()
@@ -23,6 +22,7 @@ async def read_startup(startup_id: int, db: AsyncSession = Depends(get_session))
     return result.scalars().first()
 
 
-@router.get("/{startup_id}/founders/{founder_id}/image")
-async def read_founder_image(startup_id: int, founder_id: int):
-    return {}
+@get_image("/startups/{startup_id}/founders/{founder_id}/image")
+async def get_founder_of_startup_image(
+    startup_id: int, founder_id: int
+): ...  # The decorator does all so no need to complete this
