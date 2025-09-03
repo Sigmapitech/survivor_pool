@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends
-from app.helpers.caching_proxy import cached_list_endpoint, cached_endpoint
-from ..models import Event
-from ..jeb_schema import EventBase
 from sqlalchemy import select
-from ..db import get_session
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.helpers.caching_proxy import cached_endpoint, cached_list_endpoint
+
+from ..db import get_session
+from ..jeb_schema import EventBase
+from ..models import Event
 
 router = APIRouter()
 

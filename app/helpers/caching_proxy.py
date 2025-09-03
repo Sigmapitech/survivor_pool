@@ -1,13 +1,13 @@
-from ..config import settings
+from functools import wraps
+from http import HTTPStatus
 
 import aiohttp
-from fastapi import Depends, APIRouter
-from functools import wraps
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from http import HTTPStatus
 
 from app.db import get_session
 
+from ..config import settings
 
 router = APIRouter()
 

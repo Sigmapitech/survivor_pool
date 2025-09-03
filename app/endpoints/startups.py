@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db import get_session
 from app.jeb_schema import StartupBase
 
-from ..models import Startup
 from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint
+from ..models import Startup
 
 router = APIRouter()
 

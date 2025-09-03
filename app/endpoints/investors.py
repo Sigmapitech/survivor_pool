@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends
-from app.helpers.caching_proxy import cached_list_endpoint, cached_endpoint
-from ..models import Investor
-from ..jeb_schema import InvestorBase
 from sqlalchemy import select
-from ..db import get_session
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.helpers.caching_proxy import cached_endpoint, cached_list_endpoint
+
+from ..db import get_session
+from ..jeb_schema import InvestorBase
+from ..models import Investor
 
 router = APIRouter()
 
