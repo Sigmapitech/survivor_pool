@@ -92,9 +92,9 @@ async def verify_user(
     if user is None:
         raise HTTPException(404, detail="User not found")
     logger.warning(user.verification_code, data.code)
-    if user.verification_code != data.code:
+    if getattr(user, "verification_code", None) != data.code:
         raise HTTPException(400, "Verification code is incorrect")
-    user.verified_email = True
+    setattr(user, "verified_email", True)
     await db.commit()
     return Message(message="Properly verified")
 
