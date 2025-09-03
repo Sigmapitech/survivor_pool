@@ -26,6 +26,7 @@ async def get_user_image(user_id: int):
     return {}
 
 
-@router.get("/email/{email}")
-async def read_user_by_mail(email):
-    return {}
+@cached_endpoint("/users/email/{email}", db_model=User, pydantic_model=UserBase)
+async def read_user_by_mail(email, db: AsyncSession = Depends(get_session)):
+    result = await db.execute(select(User).where(User.email == email))
+    return result.scalars().first()
