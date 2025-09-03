@@ -1,11 +1,13 @@
 import logging
+import re
 import secrets
 from datetime import datetime, timedelta, timezone
+from typing import Annotated
 
 import jwt
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, Header, HTTPException
 from passlib.hash import bcrypt
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, StringConstraints
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
@@ -51,7 +53,17 @@ class LoginRequest(BaseModel):
 
 class RegisterRequest(BaseModel):
     email: EmailStr
-    password: str
+    password: Annotated[
+        str,
+        StringConstraints(
+            strip_whitespace=True,
+            min_length=8,
+            max_length=50,
+            pattern=re.compile(
+                r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+            ),
+        ),
+    ]
     name: str
     role: str
 
