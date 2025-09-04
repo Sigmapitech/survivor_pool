@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Main from "./layouts/main";
 import Home from "./routes/home";
 
-import "./index.css";
+import "./index.scss";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Root element not found");

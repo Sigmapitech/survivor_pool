@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import NavigationBar from "./navigation-bar";
 
-import "./main.css";
+import "./main.scss";
 
 export default function Main() {
   return (
