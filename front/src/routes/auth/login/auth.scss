@@ -1,0 +1,39 @@
+.auth {
+  width: 24rem;
+  margin: 0 auto;
+  min-height: 100vh;
+  color: #000;
+  box-sizing: border-box;
+  padding: 1em;
+
+  h1 {
+    font-size: 1.5em;
+    text-align: center;
+  }
+
+  form {
+    display: grid;
+    padding: 1em;
+    margin-bottom: 20px;
+    background: #fff;
+    border: 1px solid black;
+    grid-gap: 2em;
+  }
+
+  label {
+    display: flex;
+    flex-flow: row wrap;
+    grid-gap: 2em;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row wrap;
+    grid-gap: 2em;
+  }
+}

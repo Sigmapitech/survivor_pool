@@ -2,6 +2,8 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import Main from "./layouts/main";
+import Login from "./routes/auth/login";
+import Register from "./routes/auth/register";
 import Home from "./routes/home";
 
 import "./index.scss";
@@ -15,6 +17,8 @@ ReactDOM.createRoot(root).render(
       <Route element={<Main />}>
         <Route index element={<Home />} />
       </Route>
+      <Route path="/auth/login" element={<Login />} />
+      <Route path="/auth/register" element={<Register />} />
     </Routes>
   </BrowserRouter>
 );
