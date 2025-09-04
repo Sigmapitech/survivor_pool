@@ -24,6 +24,18 @@ logger = logging.getLogger(__name__)
 ACCES_TOKEN_TIMEOUT = 42
 ALGORITHM = "HS256"
 
+type PasswordStr = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=8,
+        max_length=50,
+        pattern=re.compile(
+            r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+        ),
+    ),
+]
+
 
 def decode_access_token(token: str):
     try:
@@ -53,17 +65,7 @@ class LoginRequest(BaseModel):
 
 class RegisterRequest(BaseModel):
     email: EmailStr
-    password: Annotated[
-        str,
-        StringConstraints(
-            strip_whitespace=True,
-            min_length=8,
-            max_length=50,
-            pattern=re.compile(
-                r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-            ),
-        ),
-    ]
+    password: PasswordStr
     name: str
     role: str
 
