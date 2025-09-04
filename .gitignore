@@ -14,7 +14,7 @@ dist-ssr
 
 
 __pycache__
-survivor
+app/static/images/
 *env*
 
 # Editor directories and files

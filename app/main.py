@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from . import endpoints
 from .db import init_db
@@ -45,8 +46,7 @@ def log_routes(app: FastAPI):
 log_routes(app)
 
 
-# do not inverse mounting points!
-# app.mount("/uploads", StaticFiles(directory="assets/uploads"), name="uploads")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
 def main():

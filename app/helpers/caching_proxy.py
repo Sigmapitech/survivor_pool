@@ -1,17 +1,23 @@
+import hashlib
 import logging
+import os
 from functools import wraps
 from http import HTTPStatus
+from pathlib import Path
 
 import aiohttp
 from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db import get_session
-
 from ..config import settings
+from ..db import get_session
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
+
+CACHE_DIR = Path("app/static/images")
+os.makedirs(CACHE_DIR, exist_ok=True)
 
 
 async def fetch_from_api(api_url: str, **kwargs):
@@ -41,10 +47,23 @@ def get_image(api_url: str):
     def decorator(func):
         @wraps(func)
         async def wrapper(**kwargs):
+            filepath = CACHE_DIR / (
+                f"{hashlib.sha256(api_url.format(**kwargs).encode()).hexdigest()}.png"
+            )
+            if filepath.exists():
+                return FileResponse(filepath)
             res, status = await fetch_from_api(api_url, **kwargs)
             if status != HTTPStatus.OK.value:
                 raise HTTPException(status, detail=res)
-            return Response(content=res, media_type="image/png")
+            with open(filepath, "wb") as f:
+                if isinstance(res, bytes):
+                    f.write(res)
+                else:
+                    raise ValueError(
+                        "Expected 'res' to be of type 'bytes' for writing to file."
+                    )
+
+            return FileResponse(filepath)
 
         return router.get("/api" + api_url)(wrapper)
 
