@@ -1,7 +1,8 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import Home from "./routes";
+import Main from "./layouts/main";
+import Home from "./routes/home";
 
 import "./index.css";
 
@@ -11,7 +12,9 @@ if (!root) throw new Error("Root element not found");
 ReactDOM.createRoot(root).render(
   <BrowserRouter>
     <Routes>
-      <Route index element={<Home />} />
+      <Route element={<Main />}>
+        <Route index element={<Home />} />
+      </Route>
     </Routes>
   </BrowserRouter>
 );

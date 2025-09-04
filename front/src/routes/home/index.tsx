@@ -1,7 +1,5 @@
 import "./home.css";
 
-function Home() {
-  return <p>Hello</p>;
+export default function Home() {
+  return <p>This is the home page for jet incubator</p>;
 }
-
-export default Home;
