@@ -14,38 +14,20 @@
     git-hooks,
   }: let
     applySystems = nixpkgs.lib.genAttrs ["x86_64-linux"];
-    eachSystem = f: applySystems (system: f nixpkgs.legacyPackages.${system});
+    forAllSystems = f: applySystems (system: f nixpkgs.legacyPackages.${system});
   in {
-    checks = eachSystem (pkgs: let
-      activate = pkgs.lib.foldr (x: prev: prev // {${x}.enable = true;}) {};
-      hooks =
-        {
-          commit-name = {
-            enable = true;
-            name = "commit name";
-            stages = ["commit-msg"];
-            entry = ''
-              ${pkgs.python310.interpreter} ${./check_commit_msg.py}
-            '';
-          };
-        }
-        // activate [
-          "biome"
-          "black"
-          "trim-trailing-whitespace"
-          "alejandra"
-          "deadnix"
-        ];
-    in {
-      pre-commit-check = git-hooks.lib.${pkgs.system}.run {
-        inherit hooks;
-        src = ./.;
-      };
-    });
+    formatter = forAllSystems (pkgs: pkgs.alejandra);
 
-    formatter = eachSystem (pkgs: pkgs.alejandra);
+    checks = forAllSystems (
+      pkgs: {
+        pre-commit-check = git-hooks.lib.${pkgs.system}.run {
+          hooks = import ./nix/pre-commit-hooks.nix {inherit pkgs;};
+          src = ./.;
+        };
+      }
+    );
 
-    devShells = eachSystem (pkgs: {
+    devShells = forAllSystems (pkgs: {
       default = let
         py-env = pkgs.python3.withPackages (p:
           with p; [
@@ -80,7 +62,10 @@
               eslint
               nodejs
               typescript
+              biome
+              vite
             ];
+
             back-deps = with pkgs; [
               py-env
               black
