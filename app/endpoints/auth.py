@@ -6,6 +6,7 @@ from typing import Annotated
 
 import jwt
 from fastapi import APIRouter, Depends, Header, HTTPException
+from jinja2 import Template
 from passlib.hash import bcrypt
 from pydantic import BaseModel, EmailStr, StringConstraints
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,7 +14,6 @@ from sqlmodel import select
 
 from ..config import settings
 from ..db import get_session
-from ..helpers.html import render_template
 from ..helpers.mail import EmailSchema, send_email
 from ..models import User
 from ..proxy_schema import Message
@@ -154,20 +154,16 @@ async def register(data: RegisterRequest, db: AsyncSession = Depends(get_session
     await db.refresh(user)
 
     token = create_access_token({"id": user.id, "email": user.email})
+    with open("app/templates/auth_verification.html") as file:
+        template_str = file.read()
 
-    body = render_template(
-        "app/templates/auth_verification.html",
+    jinja_template: Template = Template(template_str)
+    body = jinja_template.render(
         verification_url=f"http://localhost:8000/api/auth/verify/",
         verification_code=str(code).zfill(6),
-        verification_token=token,
         current_year=datetime.now(timezone.utc).year,
     )
-    if body is None:
-        await db.delete(user)
-        await db.commit()
-        raise HTTPException(
-            500, detail="Something went wrong when filling mail template"
-        )
+
     await send_email(
         EmailSchema(
             to=str(user.email),

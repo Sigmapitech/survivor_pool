@@ -57,12 +57,15 @@
             fastapi
             fastapi
             fastapi-cli
+            httpx
             isort
+            jinja2
             markdownify
             passlib
             pydantic
             pydantic-settings
             pyjwt
+            pytest
             python-dotenv
             ruff
             sqlmodel
