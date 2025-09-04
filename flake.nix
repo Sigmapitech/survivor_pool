@@ -30,11 +30,11 @@
           };
         }
         // activate [
+          "biome"
           "black"
           "trim-trailing-whitespace"
           "alejandra"
           "deadnix"
-          "prettier"
         ];
     in {
       pre-commit-check = git-hooks.lib.${pkgs.system}.run {
