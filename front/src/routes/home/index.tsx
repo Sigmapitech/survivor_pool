@@ -1,10 +1,7 @@
-import './home.css'
+import "./home.css";
 
 function Home() {
-  return (
-    <p>Hello</p>
-
-  );
+  return <p>Hello</p>;
 }
 
-export default Home
+export default Home;

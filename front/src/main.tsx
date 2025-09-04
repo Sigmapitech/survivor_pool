@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 
 import Home from "./routes";
 
-import './index.css'
+import "./index.css";
 
 const root = document.getElementById("root")!;
 
@@ -12,5 +12,5 @@ ReactDOM.createRoot(root).render(
     <Routes>
       <Route index element={<Home />} />
     </Routes>
-  </BrowserRouter>,
+  </BrowserRouter>
 );
