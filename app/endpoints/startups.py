@@ -17,7 +17,6 @@ router = APIRouter(tags=["startups"])
 
 @cached_list_endpoint("/startups", db_model=Startup, pydantic_model=StartupBase)
 async def list_startup(db: AsyncSession = Depends(get_session), skip=0, limit=50):
-    result = await db.execute(select(Startup))
     return await crud_startup.get_startups(db, skip, limit)
 
 
@@ -41,6 +40,13 @@ async def create_startup(
 
 @router.put("/{startup_id}", response_model=StartupOut)
 async def update_startup(
+    startup_id: int, startup: StartupUpdate, db: AsyncSession = Depends(get_session)
+):
+    return await crud_startup.update_startup(db, startup_id, startup)
+
+
+@router.patch("/{startup_id}", response_model=StartupOut)
+async def patch_startup(
     startup_id: int, startup: StartupUpdate, db: AsyncSession = Depends(get_session)
 ):
     return await crud_startup.update_startup(db, startup_id, startup)
