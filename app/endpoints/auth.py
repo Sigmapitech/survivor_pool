@@ -67,7 +67,6 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: PasswordStr
     name: str
-    role: str
 
 
 class VerificationRequest(BaseModel):
