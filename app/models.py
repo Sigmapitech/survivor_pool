@@ -103,6 +103,7 @@ class User(Base, TableNameProvider):
     investor_id = Column(Integer, ForeignKey("investor.id"), nullable=True)
     verified_email = Column(Boolean)
     verification_code = Column(Integer)
+    authentication_string = Column(String)
 
 
 class HTTPValidationError(Base, TableNameProvider):

@@ -1,8 +1,10 @@
+import asyncio
 from logging import getLogger
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlmodel import select
 
-from .models import Base
+from .models import Base, User
 
 logger = getLogger(__name__)
 
@@ -33,10 +35,37 @@ async def init_db():
     from .endpoints.startups import list_startup
     from .endpoints.users import list_users
 
+    from passlib.hash import bcrypt
+
     async with async_session() as session:
-        await list_users(session)
-        await list_startup(session)
-        await list_events(session)
-        await list_news(session)
-        await list_partners(session)
-        await list_investors(session)
+        # TODO: remove
+        admin_email = "sg@a.b"
+        admin_name = "sg"
+        admin_password = "o"
+
+        existing_user = await session.scalar(
+            select(User).where(User.email == admin_email)
+        )
+
+        if not existing_user:
+            admin_user = User(
+                email=admin_email,
+                name=admin_name,
+                authentication_string=bcrypt.hash(admin_password),
+                role="admin",
+            )
+            session.add(admin_user)
+            await session.commit()
+
+    async def run_task(task_func):
+        async with async_session() as session:
+            await task_func(session)
+
+    await asyncio.gather(
+        run_task(list_users),
+        run_task(list_startup),
+        run_task(list_events),
+        run_task(list_news),
+        run_task(list_partners),
+        run_task(list_investors),
+    )

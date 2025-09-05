@@ -67,6 +67,7 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: PasswordStr
     name: str
+    role: str
 
 
 class VerificationRequest(BaseModel):
@@ -216,7 +217,7 @@ async def login(
 ) -> AuthResponse:
     result = await db.execute(select(User).filter(User.email == data.email))
     user = result.scalars().first()
-    if not user or not bcrypt.verify(data.password, str(user.auth)):
+    if not user or not bcrypt.verify(data.password, str(user.authentication_string)):
         raise HTTPException(status_code=401, detail="Invalid Credentials")
 
     token = create_access_token({"id": user.id, "email": user.email})

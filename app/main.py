@@ -21,7 +21,6 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(lifespan=lifespan, redoc_url="/api/doc", docs_url=None)
 
-
 if "dev" in sys.argv:
     app.add_middleware(
         CORSMiddleware,
