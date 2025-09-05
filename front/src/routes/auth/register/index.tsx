@@ -4,6 +4,12 @@ import { Link, useNavigate } from "react-router";
 
 import { API_BASE_URL } from "@/api_url";
 
+interface ValidationErrorItem {
+  loc: (string | number)[];
+  msg: string;
+  type: string;
+}
+
 export default function Register() {
   const [formData, setFormData] = useState({
     email: "",
@@ -57,7 +63,9 @@ export default function Register() {
       if (!response.ok) {
         const data = await response.json();
         if (data.detail && Array.isArray(data.detail)) {
-          const messages = data.detail.map((d: any) => d.msg).join(", ");
+          const messages = data.detail
+            .map((d: ValidationErrorItem) => d.msg)
+            .join(", ");
           throw new Error(messages);
         } else {
           throw new Error(data.message || "Registration failed");
