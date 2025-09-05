@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router";
 
 import "./auth.scss";
 
-const API_BASE_URL =
-  process.env.NODE_ENV === "production" ? "" : "http://127.0.0.1:8000";
+import { API_BASE_URL } from "@/api_url.ts";
 
 export default function Login() {
   const [email, setEmail] = useState("");
