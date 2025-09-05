@@ -3,7 +3,7 @@ import NavigationBar from "./navigation-bar";
 
 import "./main.scss";
 
-export default function Main() {
+export default function MainLayout() {
   return (
     <>
       <header>

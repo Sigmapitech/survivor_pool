@@ -10,7 +10,7 @@ interface ValidationErrorItem {
   type: string;
 }
 
-export default function Register() {
+export default function RegisterPage() {
   const [formData, setFormData] = useState({
     email: "",
     username: "",

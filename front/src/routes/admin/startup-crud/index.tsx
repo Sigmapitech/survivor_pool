@@ -15,12 +15,6 @@ const startupColumns: CrudColumn<Startup>[] = [
   { field: "maturity", label: "Maturity" },
 ];
 
-const StartupCRUDPage = () => (
-  <CrudTable<Startup>
-    apiBaseUrl="http://localhost:8000"
-    entityPath="startups"
-    columns={startupColumns}
-  />
-);
-
-export default StartupCRUDPage;
+export default function StartupCRUDPage() {
+  return <CrudTable<Startup> entityPath="startups" columns={startupColumns} />;
+}

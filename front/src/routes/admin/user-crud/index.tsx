@@ -13,12 +13,6 @@ const userColumns: CrudColumn<User>[] = [
   { field: "role", label: "Role" },
 ];
 
-const UserCRUDPage = () => (
-  <CrudTable<User>
-    apiBaseUrl="http://localhost:8000"
-    entityPath="users"
-    columns={userColumns}
-  />
-);
-
-export default UserCRUDPage;
+export default function UserCRUDPage() {
+  return <CrudTable<User> entityPath="users" columns={userColumns} />;
+}

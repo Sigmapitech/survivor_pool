@@ -1,6 +1,7 @@
 import { type ChangeEvent, useEffect, useState } from "react";
 
 import "./crud-table.scss";
+import { API_BASE_URL } from "@/api_url";
 
 export interface CrudColumn<T> {
   field: keyof T;
@@ -10,28 +11,26 @@ export interface CrudColumn<T> {
 }
 
 interface CrudTableProps<T> {
-  apiBaseUrl: string;
   entityPath: string;
   columns: CrudColumn<T>[];
   idField?: keyof T;
 }
 
-const CrudTable = <T extends { id: number }>({
-  apiBaseUrl,
+export default function CrudTable<T extends { id: number }>({
   entityPath,
   columns,
   idField = "id" as keyof T,
-}: CrudTableProps<T>) => {
+}: CrudTableProps<T>) {
   const [data, setData] = useState<T[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState<Partial<T>>({});
 
   useEffect(() => {
-    fetch(`${apiBaseUrl}/api/${entityPath}`)
+    fetch(`${API_BASE_URL}/api/${entityPath}`)
       .then((res) => res.json())
       .then((list: T[]) => setData(list))
       .catch(console.error);
-  }, [apiBaseUrl, entityPath]);
+  }, [entityPath]);
 
   const startEdit = (row: T) => {
     setEditingId(row[idField] as unknown as number);
@@ -49,7 +48,7 @@ const CrudTable = <T extends { id: number }>({
 
   const saveEdit = async () => {
     if (!editingId) return;
-    const res = await fetch(`${apiBaseUrl}/api/${entityPath}/${editingId}`, {
+    const res = await fetch(`${API_BASE_URL}/api/${entityPath}/${editingId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -68,7 +67,7 @@ const CrudTable = <T extends { id: number }>({
 
   const deleteRow = async (id: number) => {
     if (!window.confirm("Delete this item?")) return;
-    const res = await fetch(`${apiBaseUrl}/api/${entityPath}/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/api/${entityPath}/${id}`, {
       method: "DELETE",
     });
     if (res.ok) {
@@ -141,6 +140,4 @@ const CrudTable = <T extends { id: number }>({
       </table>
     </div>
   );
-};
-
-export default CrudTable;
+}
