@@ -1,3 +1,3 @@
-from .config import settings
-from .db import get_session
-from .main import app
+from .crud import startup as crud_startup
+
+__all__ = ("crud_startup",)
