@@ -34,7 +34,7 @@ async def init_db():
     from .endpoints.news import list_news
     from .endpoints.partners import list_partners
     from .endpoints.startups import list_startup
-    from .endpoints.users import list_users
+    from .endpoints.users import route_list_users
 
     from passlib.hash import bcrypt
 
@@ -65,7 +65,7 @@ async def init_db():
             await task_func(session)
 
     await asyncio.gather(
-        run_task(list_users),
+        run_task(route_list_users),
         run_task(list_startup),
         run_task(list_events),
         run_task(list_news),

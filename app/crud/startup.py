@@ -8,7 +8,7 @@ from ..schemas.startup import StartupCreate, StartupUpdate
 
 
 async def create_startup(db: AsyncSession, startup_in: StartupCreate) -> Startup:
-    new_startup = Startup(**startup_in.dict())
+    new_startup = Startup(**startup_in.model_dump())
     db.add(new_startup)
     await db.commit()
     await db.refresh(new_startup)

@@ -1,16 +1,16 @@
 import logging
-import re
 import secrets
 from datetime import datetime, timedelta, timezone
-from typing import Annotated
 
 import jwt
 from fastapi import APIRouter, Depends, Header, HTTPException
 from jinja2 import Template
 from passlib.hash import bcrypt
-from pydantic import BaseModel, EmailStr, StringConstraints
+from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
+
+from app.schemas.users import PasswordStr
 
 from ..config import settings
 from ..db import get_session
@@ -23,18 +23,6 @@ logger = logging.getLogger(__name__)
 
 ACCES_TOKEN_TIMEOUT = 42
 ALGORITHM = "HS256"
-
-type PasswordStr = Annotated[
-    str,
-    StringConstraints(
-        strip_whitespace=True,
-        min_length=8,
-        max_length=50,
-        pattern=re.compile(
-            r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-        ),
-    ),
-]
 
 
 def decode_access_token(token: str):
