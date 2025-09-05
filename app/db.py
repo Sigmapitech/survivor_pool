@@ -38,6 +38,19 @@ async def init_db():
 
     from passlib.hash import bcrypt
 
+    async def run_task(task_func):
+        async with async_session() as session:
+            await task_func(session)
+
+    await asyncio.gather(
+        run_task(route_list_users),
+        run_task(list_startup),
+        run_task(list_events),
+        run_task(list_news),
+        run_task(list_partners),
+        run_task(list_investors),
+    )
+
     async with async_session() as session:
         # TODO: remove
         admin_email = "sg@a.b"
@@ -59,16 +72,3 @@ async def init_db():
             )
             session.add(admin_user)
             await session.commit()
-
-    async def run_task(task_func):
-        async with async_session() as session:
-            await task_func(session)
-
-    await asyncio.gather(
-        run_task(route_list_users),
-        run_task(list_startup),
-        run_task(list_events),
-        run_task(list_news),
-        run_task(list_partners),
-        run_task(list_investors),
-    )
