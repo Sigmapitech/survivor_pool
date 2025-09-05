@@ -2,13 +2,14 @@ import asyncio
 from logging import getLogger
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import declarative_base
 from sqlmodel import select
-
-from .models import Base, User
 
 logger = getLogger(__name__)
 
 DATABASE_URL = "sqlite+aiosqlite:///app.db"
+
+Base = declarative_base()
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 
@@ -42,6 +43,8 @@ async def init_db():
         admin_email = "sg@a.b"
         admin_name = "sg"
         admin_password = "o"
+
+        from .models import User
 
         existing_user = await session.scalar(
             select(User).where(User.email == admin_email)
