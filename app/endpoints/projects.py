@@ -13,7 +13,8 @@ from ..db import get_session
 from ..helpers.user import get_user_id_from_token
 from ..models import Project
 from ..models.startups import Startup
-from ..proxy_schema import Message
+from ..proxy_schema import Message, ProjectBase
+from ..jeb_schema import UserBase
 
 router = APIRouter()
 
@@ -21,19 +22,32 @@ CACHE_DIR = Path("app/static/images")
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 
-@router.get("/")
+@router.get("/", response_model=list[ProjectBase])
 async def list_project(db: AsyncSession = Depends(get_session)):
-    result = await db.execute(select(Project))
-    return result.scalars().all()
+    result = await db.execute(select(Project).options(selectinload(Project.liked_by)))
+    return [
+        ProjectBase(
+            logo=getattr(project, "logo"),
+            name=getattr(project, "name"),
+            descritpion=getattr(project, "description"),
+            worth=getattr(project, "worth"),
+            nugget=len(project.liked_by),
+        )
+        for project in result.scalars().all()
+    ]
 
 
-@router.get("/{project_id}")
+@router.get("/{project_id}", response_model=ProjectBase)
 async def read_project(project_id: int, db: AsyncSession = Depends(get_session)):
-    result = await db.execute(select(Project).filter(Project.id == project_id))
+    result = await db.execute(
+        select(Project)
+        .filter(Project.id == project_id)
+        .options(selectinload(Project.liked_by))
+    )
     collected = result.scalars().first()
     if not collected:
         raise HTTPException(404, detail="Not Found")
-    return collected
+    return ProjectBase(**collected, nugget=len(collected.liked_by))
 
 
 @router.get("/{project_id}/investors")
@@ -74,7 +88,6 @@ async def create_project(
         name=name,
         description=description,
         worth=0,
-        nugget=0,
         startup_id=startup_id,
     )
     db.add(project)

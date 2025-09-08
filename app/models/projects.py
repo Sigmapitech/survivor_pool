@@ -13,7 +13,6 @@ class Project(Base, TableNameProvider):
     name = Column(String, nullable=False)
     description = Column(String, nullable=False)
     worth = Column(Integer)
-    nugget = Column(Integer)
     startup_id = Column(Integer, ForeignKey("startup.id"), nullable=False)
 
     investors = relationship(
