@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Date, Integer, String, Text
+from sqlalchemy.orm import relationship
 
 from ..db import Base
+from ._many_to_many import project_investors
 from ._table_name_provider import TableNameProvider
 
 
@@ -15,3 +17,9 @@ class Investor(Base, TableNameProvider):
     description = Column(Text, nullable=True)
     investor_type = Column(String, nullable=True)
     investment_focus = Column(String, nullable=True)
+
+    projects = relationship(
+        "Project",
+        secondary=project_investors,
+        back_populates="investors",
+    )

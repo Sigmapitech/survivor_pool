@@ -33,10 +33,13 @@ class EmailSchema(BaseModel):
 
 
 def create_mail_message(
-    email: EmailSchema, attachment_paths: Sequence[Path] | None, content_type: str
+    email: EmailSchema,
+    attachment_paths: Sequence[Path] | None,
+    content_type: str,
+    account: str,
 ) -> MIMEMultipart:
     message = MIMEMultipart()
-    message["From"] = settings.mail_user
+    message["From"] = account
     message["To"] = ", ".join(email.to)
     message["Cc"] = ", ".join(email.cc or "")
     message["Bcc"] = ", ".join(email.bcc or "")
@@ -58,15 +61,17 @@ async def send_email(
     email: EmailSchema,
     attachment_paths: Sequence[Path] | None = None,
     content_type: str = "plain",
+    hostname: tuple[str, int] = ("ms-mx-vct01.tuf.p.mcld.fr", 465),
+    account: tuple[str, str] = (settings.mail_user, settings.mail_pass),
 ):
-    message = create_mail_message(email, attachment_paths, content_type)
+    message = create_mail_message(email, attachment_paths, content_type, account[0])
     logger.debug(f"Prepared email: {message.as_string()}")
     try:
         with smtplib.SMTP_SSL(
-            host="ms-mx-vct01.tuf.p.mcld.fr", port=465, context=context
+            host=hostname[0], port=hostname[1], context=context
         ) as server:
             try:
-                server.login(user=settings.mail_user, password=settings.mail_pass)
+                server.login(user=account[0], password=account[1])
             except smtplib.SMTPAuthenticationError as e:
                 logger.error(f"SMTP login failed: {e}")
                 return
@@ -79,7 +84,7 @@ async def send_email(
             recipients.extend(email.bcc or [])
             try:
                 server.sendmail(
-                    from_addr=settings.mail_user,
+                    from_addr=account[0],
                     to_addrs=recipients,
                     msg=message.as_string(),
                 )

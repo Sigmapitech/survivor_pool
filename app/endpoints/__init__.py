@@ -36,6 +36,7 @@ def register_all(app: FastAPI):
         "startups",
         "users",
         "auth",
+        "projects",
     ):
         mod = importlib.import_module(f".{module}", package="app.endpoints")
         app.include_router(mod.router, prefix=f"/api/{module}", tags=[f"{module}"])

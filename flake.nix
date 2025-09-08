@@ -49,6 +49,7 @@
             pyjwt
             pytest
             python-dotenv
+            python-multipart
             ruff
             sqlmodel
             uvicorn
