@@ -29,14 +29,14 @@ async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+    from passlib.hash import bcrypt
+
     from .endpoints.events import list_events
     from .endpoints.investors import list_investors
     from .endpoints.news import list_news
     from .endpoints.partners import list_partners
     from .endpoints.startups import list_startup
     from .endpoints.users import route_list_users
-
-    from passlib.hash import bcrypt
 
     async def run_task(task_func):
         async with async_session() as session:

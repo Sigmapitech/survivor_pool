@@ -12,14 +12,12 @@ from ..crud.users import (
     patch_user,
     update_user,
 )
-
-from ..schemas.users import PatchRequest, UpdateRequest
-
 from ..db import get_session
 from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint, get_image
 from ..jeb_schema import UserBase
 from ..models import User
 from ..proxy_schema import Message
+from ..schemas.users import PatchRequest, UpdateRequest
 
 router = APIRouter()
 

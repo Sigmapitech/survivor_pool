@@ -1,7 +1,7 @@
 import re
 from typing import Annotated
-from pydantic import BaseModel, EmailStr, StringConstraints
 
+from pydantic import BaseModel, EmailStr, StringConstraints
 
 PasswordStr = Annotated[
     str,

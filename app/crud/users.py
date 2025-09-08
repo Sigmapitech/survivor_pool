@@ -1,12 +1,13 @@
 from typing import Sequence
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+
 from fastapi import HTTPException, status
 from passlib.hash import bcrypt
 from pydantic import EmailStr
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
 from ..models import User
-from ..schemas.users import UpdateRequest, PatchRequest
+from ..schemas.users import PatchRequest, UpdateRequest
 
 
 async def create_user(db: AsyncSession, user_in: UpdateRequest) -> User:
