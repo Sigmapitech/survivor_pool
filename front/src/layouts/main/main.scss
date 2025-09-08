@@ -2,3 +2,12 @@ header {
   width: 100%;
   border-bottom: 1px solid;
 }
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+
+  inline-size: min(100% - 2em, 1620px);
+  margin-inline: auto;
+}

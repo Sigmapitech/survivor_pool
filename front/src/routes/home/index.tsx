@@ -21,7 +21,7 @@ function Project({ project }: { project: Project }) {
         className="project-logo"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).src =
-            "https://placehold.co/600x400/EEE/31343C";
+            "https://placehold.co/600x400/EED5FB/31343C";
         }}
       />
       <h3>{project.name}</h3>
