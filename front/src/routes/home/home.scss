@@ -1,0 +1,37 @@
+.projects {
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  .project-list {
+    --minthumb: 350px;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(var(--minthumb), 1fr));
+  }
+
+  .project-card {
+    background: #fff;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    .project-logo {
+      aspect-ratio: 5/3;
+      max-width: 100%;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      width: 100%;
+    }
+
+    h3 {
+      margin: 0.5rem 0;
+    }
+
+    .project-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  }
+}
