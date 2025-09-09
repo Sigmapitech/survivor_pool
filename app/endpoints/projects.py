@@ -18,8 +18,40 @@ from ..proxy_schema import Message, ProjectBase
 
 router = APIRouter()
 
+ALLOWED_IMAGE_TYPES = {
+    "image/png",
+    "image/jpeg",
+    "image/jpg",
+    "image/gif",
+    "image/webp",
+}
+CONTENT_TYPE_TO_EXT = {
+    "image/png": ".png",
+    "image/jpeg": ".jpg",
+    "image/jpg": ".jpg",
+    "image/gif": ".gif",
+    "image/webp": ".webp",
+}
+
+
+def build_image_path(name: str, description: str, logo: UploadFile | None) -> Path:
+    base = hashlib.sha256((name + description).encode()).hexdigest()
+    if logo and logo.content_type in CONTENT_TYPE_TO_EXT:
+        ext = CONTENT_TYPE_TO_EXT[logo.content_type]
+        return CACHE_DIR / f"{base}{ext}"
+    return CACHE_DIR / base
+
+
 CACHE_DIR = Path("app/static/images")
 os.makedirs(CACHE_DIR, exist_ok=True)
+
+
+def validate_image(logo: UploadFile | None):
+    if logo and logo.content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(
+            400,
+            detail=f"Unsupported file type: {logo.content_type}. Allowed: {', '.join(ALLOWED_IMAGE_TYPES)}",
+        )
 
 
 @router.get("/", response_model=list[ProjectBase])
@@ -68,21 +100,20 @@ async def create_project(
     description: str = Form(...),
     db: AsyncSession = Depends(get_session),
 ) -> Message:
+    validate_image(logo)
     ressult = await db.execute(select(Startup).filter(Startup.id == startup_id))
     startup = ressult.scalar()
     if not startup:
         raise HTTPException(404, detail="Startup not found")
-    filepath = CACHE_DIR / (
-        f"{hashlib.sha256((name + description).encode()).hexdigest()}"
-    )
+    filepath = build_image_path(name, description, logo)
     if filepath.exists():
         raise HTTPException(
             400, detail="A project with the same name and description already exist"
         )
     if logo:
-        with filepath.open("w+") as f:
+        with filepath.open("wb") as f:
             data = await logo.read()
-            f.write(str(data))
+            f.write(data)
     project = Project(
         logo=str(filepath),
         name=name,
@@ -103,20 +134,19 @@ async def update_project(
     logo: UploadFile | None = File(None),
     db: AsyncSession = Depends(get_session),
 ) -> Message:
+    validate_image(logo)
     result = await db.execute(select(Project).filter(Project.id == project_id))
     project = result.scalar()
     if not project:
         raise HTTPException(404, detail="Project not found")
     old_filepath = getattr(project, "logo")
-    new_filepath = CACHE_DIR / (
-        f"{hashlib.sha256((name + description).encode()).hexdigest()}"
-    )
+    new_filepath = build_image_path(name, description, logo)
     if logo:
         if old_filepath:
             os.remove(getattr(project, "logo"))
-        with new_filepath.open("w+") as f:
+        with new_filepath.open("wb") as f:
             data = await logo.read()
-            f.write(str(data))
+            f.write(data)
         setattr(project, "logo", str(new_filepath))
     elif old_filepath:
         os.rename(old_filepath, new_filepath)
@@ -135,6 +165,7 @@ async def patch_project(
     logo: UploadFile | None = File(None),
     db: AsyncSession = Depends(get_session),
 ) -> Message:
+    validate_image(logo)
     result = await db.execute(select(Project).filter(Project.id == project_id))
     project = result.scalar()
     if not project:
@@ -145,14 +176,16 @@ async def patch_project(
         setattr(project, "description", description)
 
     if logo:
-        new_filepath = CACHE_DIR / (
-            f"{hashlib.sha256(((name or project.name) + (description or project.description)).encode()).hexdigest()}"
+        new_filepath = build_image_path(
+            name or getattr(project, "name"),
+            description or getattr(project, "description"),
+            logo,
         )
         if getattr(project, "logo"):
             os.remove(getattr(project, "logo"))
-        with new_filepath.open("w+") as f:
+        with new_filepath.open("wb") as f:
             data = await logo.read()
-            f.write(str(data))
+            f.write(data)
         setattr(project, "logo", str(new_filepath))
     await db.commit()
     return Message(message="Project successfully updated")
