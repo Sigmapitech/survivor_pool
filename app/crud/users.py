@@ -48,6 +48,13 @@ async def get_users(
 
 async def update_user(db: AsyncSession, user_id: int, user_in: UpdateRequest) -> User:
     user = await get_user(db, user_id)
+
+    if getattr(user, "email") != user_in.email:
+        result = await db.execute(select(User).filter(User.email == user_in.email))
+        collected = result.scalars().all()
+        if len(collected) > 0:
+            raise HTTPException(status_code=400, detail="Email already used")
+
     data = user_in.model_dump()
 
     for key, value in data.items():
@@ -66,6 +73,13 @@ async def update_user(db: AsyncSession, user_id: int, user_in: UpdateRequest) ->
 
 async def patch_user(db: AsyncSession, user_id: int, user_in: PatchRequest) -> User:
     user = await get_user(db, user_id)
+
+    if user_in.email and getattr(user, "email") != user_in.email:
+        result = await db.execute(select(User).filter(User.email == user_in.email))
+        collected = result.scalars().all()
+        if len(collected) > 0:
+            raise HTTPException(status_code=400, detail="Email already used")
+
     data = user_in.model_dump(exclude_unset=True)
 
     for key, value in data.items():
