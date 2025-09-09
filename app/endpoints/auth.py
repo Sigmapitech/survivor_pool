@@ -26,6 +26,18 @@ ALGORITHM = "HS256"
 
 
 def decode_access_token(token: str):
+    """
+    Decodes a JWT access token and returns its payload.
+
+    Args:
+        token (str): The JWT access token to decode.
+
+    Returns:
+        dict: The decoded payload from the JWT token.
+
+    Raises:
+        HTTPException: If the token has expired or is invalid.
+    """
     try:
         payload = jwt.decode(token, settings.jwt_secret, algorithms=[ALGORITHM])
         return payload
@@ -37,6 +49,16 @@ def decode_access_token(token: str):
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    """
+    Creates a JWT access token with an expiration time.
+
+    Args:
+        data (dict): The payload data to include in the token.
+        expires_delta (timedelta, optional): The time duration after which the token will expire. Defaults to None.
+
+    Returns:
+        str: The encoded JWT access token.
+    """
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + (
         expires_delta or timedelta(minutes=ACCES_TOKEN_TIMEOUT)
@@ -66,7 +88,17 @@ class AuthResponse(BaseModel):
     token: str
 
 
-@router.post("/verify/")
+@router.post(
+    "/verify/",
+    response_model=Message,
+    description="Verify user account",
+    responses={
+        200: {"model": Message, "description": "User verified"},
+        400: {"model": Message, "description": "Verification code is incorrect"},
+        401: {"model": Message, "description": "No token, authorization denied"},
+        404: {"model": Message, "description": "User not found"},
+    },
+)
 async def verify_user(
     data: VerificationRequest,
     db: AsyncSession = Depends(get_session),
@@ -92,37 +124,11 @@ async def verify_user(
 @router.post(
     "/register/",
     response_model=AuthResponse,
-    description="Register a new user",
-    status_code=status.HTTP_201_CREATED,
+    description="Register a new account",
+    status_code=201,
     responses={
-        201: {
-            "content": {
-                "application/json": {
-                    "example": AuthResponse(
-                        token=create_access_token(
-                            {"id": 1, "email": "www.xxx@yyyy.zzz"}, timedelta(0)
-                        )
-                    ).model_dump()
-                }
-            },
-        },
-        400: {
-            "content": {
-                "application/json": {"example": {"detail": "Account already exists"}}
-            },
-        },
-        422: {
-            "description": "Validation Error",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "detail": [
-                            {"loc": ["string", 0], "msg": "string", "type": "string"}
-                        ]
-                    }
-                }
-            },
-        },
+        201: {"model": AuthResponse, "description": "Account created"},
+        400: {"model": Message, "description": "Account already exists"},
     },
 )
 async def register(data: RegisterRequest, db: AsyncSession = Depends(get_session)):
@@ -171,34 +177,8 @@ async def register(data: RegisterRequest, db: AsyncSession = Depends(get_session
     response_model=AuthResponse,
     description="Login with account",
     responses={
-        200: {
-            "content": {
-                "application/json": {
-                    "example": AuthResponse(
-                        token=create_access_token(
-                            {"id": 1, "email": "www.xxx@yyyy.zzz"}, timedelta(0)
-                        )
-                    ).model_dump()
-                }
-            },
-        },
-        401: {
-            "content": {
-                "application/json": {"example": {"detail": "Invalid Credentials"}}
-            },
-        },
-        422: {
-            "description": "Validation Error",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "detail": [
-                            {"loc": ["string", 0], "msg": "string", "type": "string"}
-                        ]
-                    }
-                }
-            },
-        },
+        200: {"model": AuthResponse, "description": "Login successful"},
+        401: {"model": Message, "description": "Invalid Credentials"},
     },
 )
 async def login(
