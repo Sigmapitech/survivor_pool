@@ -10,6 +10,7 @@ import Image from "./routes/image";
 import "./index.scss";
 import StartupCRUDPage from "@/routes/admin/startup-crud";
 import UserCRUDPage from "./routes/admin/user-crud";
+import NewsPage from "./routes/news-feed";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Root element not found");
@@ -24,7 +25,8 @@ ReactDOM.createRoot(root).render(
       <Route path="/auth/register" element={<Register />} />
       <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
+      <Route path="/admin/startup/project-register" element={<Image />} />
+      <Route path="/news" element={<NewsPage />} />
     </Routes>
-    <Image />
   </BrowserRouter>
 );
