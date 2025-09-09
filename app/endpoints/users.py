@@ -45,19 +45,45 @@ async def route_read_user_by_mail(
     return await get_user_by_email(db, email)
 
 
-@router.delete("/{user_id}")
+@router.delete(
+    "/{user_id}",
+    response_model=Message,
+    description="Delete user",
+    responses={
+        404: {"model": Message, "description": "User not found"},
+        200: {"model": Message, "description": "User deleted"},
+    },
+)
 async def route_delete_user(user_id: int, db: AsyncSession = Depends(get_session)):
     return await delete_user(db, user_id)
 
 
-@router.put("/{user_id}")
+@router.put(
+    "/{user_id}",
+    response_model=UserBase,
+    description="Update user",
+    responses={
+        404: {"model": Message, "description": "User not found"},
+        200: {"model": UserBase, "description": "User updated"},
+        400: {"model": Message, "description": "email already in use"},
+    },
+)
 async def route_update_user(
     user_id: int, data: UpdateRequest, db: AsyncSession = Depends(get_session)
 ) -> UserBase:
     return await update_user(db, user_id, data)
 
 
-@router.patch("/{user_id}")
+@router.patch(
+    "/{user_id}",
+    response_model=UserBase,
+    description="Patch user",
+    responses={
+        404: {"model": Message, "description": "User not found"},
+        200: {"model": UserBase, "description": "User patched"},
+        400: {"model": Message, "description": "email already in use"},
+    },
+)
 async def route_patch_user(
     user_id: int, data: PatchRequest, db: AsyncSession = Depends(get_session)
 ) -> UserBase:
