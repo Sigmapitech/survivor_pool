@@ -48,10 +48,11 @@ async def route_read_user_by_mail(
 @router.delete(
     "/{user_id}",
     response_model=Message,
+    status_code=204,
     description="Delete user",
     responses={
         404: {"model": Message, "description": "User not found"},
-        200: {"model": Message, "description": "User deleted"},
+        204: {"model": Message, "description": "User deleted"},
     },
 )
 async def route_delete_user(user_id: int, db: AsyncSession = Depends(get_session)):

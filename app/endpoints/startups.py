@@ -11,6 +11,7 @@ from ..db import get_session
 from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint, get_image
 from ..jeb_schema import StartupBase
 from ..models import Startup
+from ..proxy_schema import Message
 
 router = APIRouter(tags=["startups"])
 
@@ -31,27 +32,60 @@ async def get_founder_of_startup_image(
 ): ...  # The decorator does all so no need to complete this
 
 
-@router.post("/", response_model=StartupOut)
+@router.post(
+    "/",
+    response_model=StartupOut,
+    status_code=201,
+    description="Create a new startup",
+    responses={
+        201: {"model": StartupOut, "description": "Startup created"},
+        400: {"model": Message, "description": "Invalid input"},
+    },
+)
 async def create_startup(
     startup: StartupCreate, db: AsyncSession = Depends(get_session)
 ):
     return await crud_startup.create_startup(db, startup)
 
 
-@router.put("/{startup_id}", response_model=StartupOut)
+@router.put(
+    "/{startup_id}",
+    response_model=StartupOut,
+    description="Update a startup",
+    responses={
+        404: {"model": Message, "description": "Startup not found"},
+        200: {"model": StartupOut, "description": "Startup updated"},
+    },
+)
 async def update_startup(
     startup_id: int, startup: StartupUpdate, db: AsyncSession = Depends(get_session)
 ):
     return await crud_startup.update_startup(db, startup_id, startup)
 
 
-@router.patch("/{startup_id}", response_model=StartupOut)
+@router.patch(
+    "/{startup_id}",
+    response_model=StartupOut,
+    description="Patch a startup",
+    responses={
+        404: {"model": Message, "description": "Startup not found"},
+        200: {"model": StartupOut, "description": "Startup patched"},
+    },
+)
 async def patch_startup(
     startup_id: int, startup: StartupUpdate, db: AsyncSession = Depends(get_session)
 ):
     return await crud_startup.update_startup(db, startup_id, startup)
 
 
-@router.delete("/{startup_id}", status_code=204)
+@router.delete(
+    "/{startup_id}",
+    status_code=204,
+    description="Delete a startup",
+    responses={
+        404: {"model": Message, "description": "Startup not found"},
+        204: {"model": Message, "description": "Startup deleted"},
+    },
+)
 async def delete_startup(startup_id: int, db: AsyncSession = Depends(get_session)):
     await crud_startup.delete_startup(db, startup_id)
