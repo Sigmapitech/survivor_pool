@@ -11,10 +11,10 @@ from app.models.users import User
 
 from ..db import get_session
 from ..helpers.user import get_user_id_from_token
+from ..jeb_schema import UserBase
 from ..models import Project
 from ..models.startups import Startup
 from ..proxy_schema import Message, ProjectBase
-from ..jeb_schema import UserBase
 
 router = APIRouter()
 
@@ -92,7 +92,81 @@ async def create_project(
     )
     db.add(project)
     await db.commit()
-    return Message(message="Project successfuly created")
+    return Message(message="Project successfully created")
+
+
+@router.put("/{project_id}", response_model=Message)
+async def update_project(
+    project_id: int,
+    name: str = Form(...),
+    description: str = Form(...),
+    logo: UploadFile | None = File(None),
+    db: AsyncSession = Depends(get_session),
+) -> Message:
+    result = await db.execute(select(Project).filter(Project.id == project_id))
+    project = result.scalar()
+    if not project:
+        raise HTTPException(404, detail="Project not found")
+    old_filepath = getattr(project, "logo")
+    new_filepath = CACHE_DIR / (
+        f"{hashlib.sha256((name + description).encode()).hexdigest()}"
+    )
+    if logo:
+        if old_filepath:
+            os.remove(getattr(project, "logo"))
+        with new_filepath.open("w+") as f:
+            data = await logo.read()
+            f.write(str(data))
+        setattr(project, "logo", str(new_filepath))
+    elif old_filepath:
+        os.rename(old_filepath, new_filepath)
+        setattr(project, "logo", str(new_filepath))
+    setattr(project, "name", name)
+    setattr(project, "description", description)
+    await db.commit()
+    return Message(message="Project successfully updated")
+
+
+@router.patch("/{project_id}", response_model=Message)
+async def patch_project(
+    project_id: int,
+    name: str | None = Form(None),
+    description: str | None = Form(None),
+    logo: UploadFile | None = File(None),
+    db: AsyncSession = Depends(get_session),
+) -> Message:
+    result = await db.execute(select(Project).filter(Project.id == project_id))
+    project = result.scalar()
+    if not project:
+        raise HTTPException(404, detail="Project not found")
+    if name:
+        setattr(project, "name", name)
+    if description:
+        setattr(project, "description", description)
+
+    if logo:
+        new_filepath = CACHE_DIR / (
+            f"{hashlib.sha256(((name or project.name) + (description or project.description)).encode()).hexdigest()}"
+        )
+        if getattr(project, "logo"):
+            os.remove(getattr(project, "logo"))
+        with new_filepath.open("w+") as f:
+            data = await logo.read()
+            f.write(str(data))
+        setattr(project, "logo", str(new_filepath))
+    await db.commit()
+    return Message(message="Project successfully updated")
+
+
+@router.delete("/{project_id}", response_model=Message)
+async def delete_project(project_id: int, db: AsyncSession = Depends(get_session)):
+    result = await db.execute(select(Project).filter(Project.id == project_id))
+    project = result.scalar()
+    if not project:
+        raise HTTPException(404, detail="Project not found")
+    await db.delete(project)
+    await db.commit()
+    return Message(message="Project successsfully deleted")
 
 
 @router.post("/{project_id}/like", response_model=Message)
