@@ -5,6 +5,7 @@ import Main from "./layouts/main";
 import Login from "./routes/auth/login";
 import Register from "./routes/auth/register";
 import Home from "./routes/home";
+import Image from "./routes/image";
 
 import "./index.scss";
 import StartupCRUDPage from "@/routes/admin/startup-crud";
@@ -24,5 +25,6 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
     </Routes>
+    <Image />
   </BrowserRouter>
 );
