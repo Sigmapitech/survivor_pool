@@ -54,7 +54,14 @@ def validate_image(logo: UploadFile | None):
         )
 
 
-@router.get("/", response_model=list[ProjectBase])
+@router.get(
+    "/",
+    response_model=list[ProjectBase],
+    description="List all projects",
+    responses={
+        200: {"model": list[ProjectBase], "description": "List of projects"},
+    },
+)
 async def list_project(db: AsyncSession = Depends(get_session)):
     result = await db.execute(select(Project).options(selectinload(Project.liked_by)))
     return [
@@ -69,7 +76,15 @@ async def list_project(db: AsyncSession = Depends(get_session)):
     ]
 
 
-@router.get("/{project_id}", response_model=ProjectBase)
+@router.get(
+    "/{project_id}",
+    response_model=ProjectBase,
+    description="Get a project by ID",
+    responses={
+        200: {"model": ProjectBase, "description": "Project found"},
+        404: {"model": Message, "description": "Project not found"},
+    },
+)
 async def read_project(project_id: int, db: AsyncSession = Depends(get_session)):
     result = await db.execute(
         select(Project)
@@ -82,7 +97,15 @@ async def read_project(project_id: int, db: AsyncSession = Depends(get_session))
     return ProjectBase(**collected, nugget=len(collected.liked_by))
 
 
-@router.get("/{project_id}/investors")
+@router.get(
+    "/{project_id}/investors",
+    response_model=list[UserBase],
+    description="List investors of a project",
+    responses={
+        200: {"model": list[UserBase], "description": "List of investors"},
+        404: {"model": Message, "description": "Project not found"},
+    },
+)
 async def list_project_investors(
     project_id: int, db: AsyncSession = Depends(get_session)
 ):
@@ -92,7 +115,20 @@ async def list_project_investors(
     return result.scalars().all()
 
 
-@router.post("/{startup_id}", response_model=Message)
+@router.post(
+    "/{startup_id}",
+    response_model=Message,
+    status_code=201,
+    description="Create a new project for a startup",
+    responses={
+        201: {"model": Message, "description": "Project successfully created"},
+        400: {
+            "model": Message,
+            "description": "A project with the same name and description already exist",
+        },
+        404: {"model": Message, "description": "Startup not found"},
+    },
+)
 async def create_project(
     startup_id: int,
     logo: UploadFile | None = File(None),
@@ -126,7 +162,15 @@ async def create_project(
     return Message(message="Project successfully created")
 
 
-@router.put("/{project_id}", response_model=Message)
+@router.put(
+    "/{project_id}",
+    response_model=Message,
+    description="Update a project",
+    responses={
+        200: {"model": Message, "description": "Project successfully updated"},
+        404: {"model": Message, "description": "Project not found"},
+    },
+)
 async def update_project(
     project_id: int,
     name: str = Form(...),
@@ -157,7 +201,15 @@ async def update_project(
     return Message(message="Project successfully updated")
 
 
-@router.patch("/{project_id}", response_model=Message)
+@router.patch(
+    "/{project_id}",
+    response_model=Message,
+    description="Patch a project",
+    responses={
+        200: {"model": Message, "description": "Project successfully updated"},
+        404: {"model": Message, "description": "Project not found"},
+    },
+)
 async def patch_project(
     project_id: int,
     name: str | None = Form(None),
@@ -191,7 +243,16 @@ async def patch_project(
     return Message(message="Project successfully updated")
 
 
-@router.delete("/{project_id}", response_model=Message)
+@router.delete(
+    "/{project_id}",
+    response_model=Message,
+    status_code=204,
+    description="Delete a project",
+    responses={
+        404: {"model": Message, "description": "Project not found"},
+        204: {"model": Message, "description": "Project deleted"},
+    },
+)
 async def delete_project(project_id: int, db: AsyncSession = Depends(get_session)):
     result = await db.execute(select(Project).filter(Project.id == project_id))
     project = result.scalar()
@@ -202,7 +263,16 @@ async def delete_project(project_id: int, db: AsyncSession = Depends(get_session
     return Message(message="Project successsfully deleted")
 
 
-@router.post("/{project_id}/like", response_model=Message)
+@router.post(
+    "/{project_id}/like",
+    response_model=Message,
+    description="Like a project",
+    responses={
+        200: {"model": Message, "description": "Project liked"},
+        400: {"model": Message, "description": "Already liked"},
+        404: {"model": Message, "description": "User or Project not found"},
+    },
+)
 async def like_project(
     project_id: int,
     db: AsyncSession = Depends(get_session),
