@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -35,7 +35,7 @@ async def get_founder_of_startup_image(
 @router.post(
     "/",
     response_model=StartupOut,
-    status_code=201,
+    status_code=status.HTTP_201_CREATED,
     description="Create a new startup",
     responses={
         201: {"model": StartupOut, "description": "Startup created"},
@@ -80,11 +80,10 @@ async def patch_startup(
 
 @router.delete(
     "/{startup_id}",
-    status_code=204,
+    status_code=status.HTTP_204_NO_CONTENT,
     description="Delete a startup",
     responses={
         404: {"model": Message, "description": "Startup not found"},
-        204: {"model": Message, "description": "Startup deleted"},
     },
 )
 async def delete_startup(startup_id: int, db: AsyncSession = Depends(get_session)):

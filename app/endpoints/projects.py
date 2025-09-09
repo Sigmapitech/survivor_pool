@@ -2,7 +2,16 @@ import hashlib
 import os
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, UploadFile
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    Header,
+    HTTPException,
+    UploadFile,
+    status,
+)
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -118,7 +127,7 @@ async def list_project_investors(
 @router.post(
     "/{startup_id}",
     response_model=Message,
-    status_code=201,
+    status_code=status.HTTP_201_CREATED,
     description="Create a new project for a startup",
     responses={
         201: {"model": Message, "description": "Project successfully created"},
@@ -245,12 +254,10 @@ async def patch_project(
 
 @router.delete(
     "/{project_id}",
-    response_model=Message,
-    status_code=204,
+    status_code=status.HTTP_204_NO_CONTENT,
     description="Delete a project",
     responses={
         404: {"model": Message, "description": "Project not found"},
-        204: {"model": Message, "description": "Project deleted"},
     },
 )
 async def delete_project(project_id: int, db: AsyncSession = Depends(get_session)):
@@ -260,7 +267,6 @@ async def delete_project(project_id: int, db: AsyncSession = Depends(get_session
         raise HTTPException(404, detail="Project not found")
     await db.delete(project)
     await db.commit()
-    return Message(message="Project successsfully deleted")
 
 
 @router.post(

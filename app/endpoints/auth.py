@@ -93,8 +93,9 @@ async def verify_user(
     "/register/",
     response_model=AuthResponse,
     description="Register a new user",
+    status_code=status.HTTP_201_CREATED,
     responses={
-        200: {
+        201: {
             "content": {
                 "application/json": {
                     "example": AuthResponse(
