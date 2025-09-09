@@ -1,16 +1,41 @@
 import { useState } from "react";
 
-export default function ImageForm() {
-  const [filebase64, setFileBase64] = useState<string>("");
-  const [baseurl, setBaseURL] = useState<string>("");
-  const [disabler, setDisable] = useState<boolean>(false);
+import { API_BASE_URL } from "@/api_url.ts";
 
-  function formSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.toString();
-    console.log({ filebase64 });
-    console.log({ baseurl });
-    alert("file submitted");
-  }
+export default function ImageForm() {
+  const [file, setFile] = useState<string>("");
+  const [disabler, setDisable] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [desc, setDesc] = useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const formdata = new FormData();
+      formdata.append("logo", file);
+      formdata.append("name", name);
+      formdata.append("description", desc);
+      console.table(formdata);
+
+      const response = await fetch(`${API_BASE_URL}/api/projects/${2}`, {
+        method: "POST",
+        body: formdata,
+      });
+
+      if (!response.ok) {
+        throw new Error("Invalid credentials");
+      }
+
+      const data = await response.json();
+
+      localStorage.setItem("token", data.token);
+    } catch (err) {
+      setError(err?.message);
+    }
+  };
 
   function convertFile(files: FileList | null) {
     if (files) {
@@ -22,15 +47,11 @@ export default function ImageForm() {
       reader.readAsArrayBuffer(fileRef);
       reader.onload = (ev: ProgressEvent<FileReader>) => {
         const result = ev.target?.result as ArrayBuffer;
-        setFileBase64(
+        setFile(
           `data:${fileType};base64,${btoa(String.fromCharCode(...new Uint8Array(result)))}`
         );
       };
     }
-  }
-
-  function extractURL(e: string) {
-    setBaseURL(e);
   }
 
   function submit() {
@@ -38,21 +59,45 @@ export default function ImageForm() {
   }
 
   return (
-    <form encType="multipart/form-data" onSubmit={formSubmit}>
-      <input
-        type="file"
-        disabled={disabler}
-        onChange={(e) => convertFile(e.target.files)}
-      />
-      <input
-        type="url"
-        disabled={disabler}
-        onChange={(e) => {
-          extractURL(e.target.value);
-        }}
-      />
+    <form encType="multipart/form-data" onSubmit={handleSubmit}>
+      <div className="project-register">
+        <label htmlFor="Picture as File">Picture as File</label>
+        <input
+          name="Picture as File"
+          type="file"
+          disabled={disabler}
+          onChange={(e) => convertFile(e.target.files)}
+        />
+      </div>
+      <div className="project-register">
+        <label htmlFor="Picture as Link">Picture as Link</label>
+        <input
+          name="Picture as Link"
+          type="url"
+          disabled={disabler}
+          onChange={(e) => setFile(e.target.value)}
+        />
+      </div>
+      <div className="project-register">
+        <label htmlFor="Name">Name</label>
+        <input
+          name="Name"
+          type="text"
+          disabled={disabler}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <div className="project-register">
+        <label htmlFor="Description">Description</label>
+        <input
+          name="Description"
+          type="text"
+          disabled={disabler}
+          onChange={(e) => setDesc(e.target.value)}
+        />
+      </div>
       <hr />
-      {filebase64 && (
+      {file && (
         <>
           <p>
             Here is your image
@@ -62,6 +107,7 @@ export default function ImageForm() {
             <img src={filebase64} width={300} />
           )*/}
           <hr />
+          {error && <p className="error">{error}</p>}
           <button type="submit" onClick={submit}>
             {" "}
             Submit and check the console
