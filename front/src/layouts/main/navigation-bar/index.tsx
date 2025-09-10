@@ -10,9 +10,15 @@ export default function Navbar() {
       </Link>
 
       <div className="navbar-right">
-        <Link to="/auth/login">Projects</Link>
-        <Link to="/auth/login">Login</Link>
-        <Link to="/auth/register">Register</Link>
+        <Link className="dash-in" to="/auth/login">
+          Projects
+        </Link>
+        <Link className="dash-in" to="/auth/login">
+          Login
+        </Link>
+        <Link className="dash-in" to="/auth/register">
+          Register
+        </Link>
       </div>
     </div>
   );

@@ -22,6 +22,30 @@ h1, h2, h3, h4, h5 {
 }
 
 a {
+  position: relative;
   text-decoration: none;
-  color: #F18585;
+  color: #c174f2;
+  transition: color 0s;
+
+  &:hover {
+    color: #f18585;
+  }
+
+  &.dash-in {
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0%;
+      bottom: 0.5em;
+      background-color: #f18585;
+      transition: width 0.3s ease-in-out;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
 }

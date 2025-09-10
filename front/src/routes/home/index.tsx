@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/api_url";
 import "./home.scss";
+import { Link } from "react-router";
 
 export interface Project {
   id: number;
@@ -15,20 +16,19 @@ export interface Project {
 function Project({ project }: { project: Project }) {
   return (
     <div className="project-card" key={project.id}>
-      <img
-        src={`${API_BASE_URL}/${project.logo}`}
-        alt={project.name}
-        className="project-logo"
-        onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src =
-            "https://placehold.co/600x400/EED5FB/31343C";
-        }}
-      />
-      <h3>{project.name}</h3>
-      <p>{project.description}</p>
-      <div className="project-meta">
-        <span>Worth: ${project.worth}</span>
-        <span>Nuggets: {project.nugget}</span>
+      <div className="project-card-meta">
+        <h3>{project.name}</h3>
+        <p>{project.description}</p>
+      </div>
+      <div className="project-card-image">
+        <img
+          src={`${API_BASE_URL}/${project.logo}`}
+          alt={project.name}
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src =
+              "https://placehold.co/600x400/EED5FB/31343C";
+          }}
+        />
       </div>
     </div>
   );
@@ -47,16 +47,21 @@ export default function HomePage() {
   return (
     <>
       <section className="hero">
+        <img height="120px" src="logo.png" alt="J.E.B." />
         <div className="hero-description">
-          <img height="120px" src="logo.png" alt="J.E.B." />
           <p>
-            Discover a dynamic hub designed to empower startups and showcase
-            groundbreaking innovation. Our platform highlights visionary
-            founders, ambitious projects, and disruptive solutions across
-            multiple industries. From early-stage ideas to market-ready
-            ventures, we provide visibility into the inspiring journey of
-            entrepreneurs shaping the future.
+            Discover a <strong>dynamic hub</strong> designed to{" "}
+            <strong>empower startups</strong> and showcase groundbreaking
+            innovation. Our platform{" "}
+            <strong>highlights visionary founders</strong>, ambitious projects,
+            and disruptive solutions across multiple industries. From{" "}
+            <strong>early-stage ideas to market-ready ventures</strong>, we
+            provide visibility into the inspiring journey of entrepreneurs
+            shaping the future.
           </p>
+          <Link className="arrow-link" to="login">
+            Enroll your startup & get funds
+          </Link>
         </div>
       </section>
 
