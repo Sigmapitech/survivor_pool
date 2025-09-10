@@ -47,11 +47,17 @@ export default function HomePage() {
   return (
     <>
       <section className="hero">
-        <p>
-          Uniting breakthrough ideas with global capital. We fast-track
-          early-stage startups by providing funding, expertise, and an
-          unparalleled international network.
-        </p>
+        <div className="hero-description">
+          <img height="120px" src="logo.png" alt="J.E.B." />
+          <p>
+            Discover a dynamic hub designed to empower startups and showcase
+            groundbreaking innovation. Our platform highlights visionary
+            founders, ambitious projects, and disruptive solutions across
+            multiple industries. From early-stage ideas to market-ready
+            ventures, we provide visibility into the inspiring journey of
+            entrepreneurs shaping the future.
+          </p>
+        </div>
       </section>
 
       <section className="projects">

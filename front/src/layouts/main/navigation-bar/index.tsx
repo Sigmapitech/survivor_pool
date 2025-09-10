@@ -5,9 +5,12 @@ import "./navbar.scss";
 export default function Navbar() {
   return (
     <div className="navbar">
-      <Link to="/">Jeb incubator</Link>
+      <Link className="navbar-title" to="/">
+        JEB incubator
+      </Link>
 
-      <div className="navbar-auth">
+      <div className="navbar-right">
+        <Link to="/auth/login">Projects</Link>
         <Link to="/auth/login">Login</Link>
         <Link to="/auth/register">Register</Link>
       </div>
