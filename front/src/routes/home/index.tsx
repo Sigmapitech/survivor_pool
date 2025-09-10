@@ -26,7 +26,7 @@ function Project({ project }: { project: Project }) {
           alt={project.name}
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).src =
-              "https://placehold.co/600x400/EED5FB/31343C";
+              "https://placehold.co/200x200/EED5FB/31343C";
           }}
         />
       </div>
@@ -40,7 +40,7 @@ export default function HomePage() {
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/projects/`)
       .then((res) => res.json())
-      .then((list: Project[]) => setProjects(list))
+      .then((list: Project[]) => setProjects(list.slice(0, 5)))
       .catch(console.error);
   }, []);
 
@@ -65,19 +65,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="projects">
-        <h2>Projects</h2>
-        <div className="project-list">
-          {projects === null ? (
-            <p>Loading projects...</p>
-          ) : projects.length === 0 ? (
-            <p>No projects available at the moment.</p>
-          ) : (
-            projects.map((project) => (
-              <Project key={project.id} project={project} />
-            ))
-          )}
-        </div>
+      <section className="project-list">
+        {projects === null ? (
+          <p>Loading projects...</p>
+        ) : projects.length === 0 ? (
+          <p>No projects available at the moment.</p>
+        ) : (
+          projects.map((project) => (
+            <Project key={project.id} project={project} />
+          ))
+        )}
       </section>
     </>
   );

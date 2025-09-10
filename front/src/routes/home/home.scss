@@ -5,7 +5,7 @@
 
   &-description {
     width: 80ch;
-    padding: 2em;
+    padding: 1em;
     line-height: 1.8em;
     margin: 0;
 
@@ -41,17 +41,13 @@
   gap: 1ch;
 }
 
-.projects {
-  h2 {
-    margin-bottom: 1rem;
-  }
+.project-list {
+  --minthumb: 320px;
+  display: flex;
+  overflow-x: scroll;
+  gap: 1.5rem;
 
-  .project-list {
-    --minthumb: 350px;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(var(--minthumb), 1fr));
-  }
+  padding-block: 2em;
 }
 
 .project-card {
@@ -60,7 +56,7 @@
 
   background: black;
   color: white;
-  border: 4px solid transparent;
+  border: 1px solid transparent;
   border-image: linear-gradient(
     180deg,
     rgba(246, 174, 174, 1) 0%,
@@ -75,14 +71,13 @@
     h3 {
       margin: 0.5rem 0;
       font-weight: 750;
-      font-size: 1.8rem;
+      font-size: 1.2rem;
       font-style: italic;
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
     p {
-      height: 4em;
       text-overflow: ellipsis;
       overflow: hidden;
 
