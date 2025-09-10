@@ -1,7 +1,14 @@
+section {
+  padding: 2em;
+}
+
 .hero {
   display: flex;
+  align-items: center;
   justify-content: center;
   border-bottom: 1px solid white;
+  padding: 2em;
+  gap: 2em;
 
   &-description {
     width: 80ch;
@@ -16,8 +23,8 @@
 
   img {
     z-index: 1;
-    margin-top: -2em;
-    border: 4px solid transparent;
+    aspect-ratio: 1/1;
+    border: 1px solid transparent;
     border-image: linear-gradient(
       180deg,
       rgba(246, 174, 174, 1) 0%,

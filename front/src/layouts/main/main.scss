@@ -1,44 +1,17 @@
-header {
-  width: 100%;
-  padding-bottom: 0.5em;
-
-  margin-bottom: 4em;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 4em;
-    top: calc(100% - .5em);
-    left: 0;
-    background: #F6AEAE;
-    background:
-      linear-gradient(144deg,rgba(246, 174, 174, 1) 0%,
-      rgba(241, 133, 133, 1) 25%,
-      rgba(245, 112, 212, 1) 56%,
-      rgba(193, 116, 242, 1) 82%);
-  }
-
-  &::after {
-    border-bottom: 2px solid white;
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 1px;
-  }
-}
-
 main {
   display: flex;
   flex-direction: column;
-  gap: 2em;
 
   inline-size: min(100% - 2em, 1620px);
   margin-inline: auto;
 
+  position: relative;
   padding-bottom: 5em;
+}
+
+.navbar, main {
+  border-left: 1px solid white;
+  box-sizing: border-box;
 }
 
 @keyframes move-grid {

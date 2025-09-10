@@ -47,7 +47,7 @@ export default function HomePage() {
   return (
     <>
       <section className="hero">
-        <img height="120px" src="logo.png" alt="J.E.B." />
+        <img height="160px" src="logo.png" alt="J.E.B." />
         <div className="hero-description">
           <p>
             Discover a <strong>dynamic hub</strong> designed to{" "}

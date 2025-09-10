@@ -5,8 +5,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#root {
+  min-height: 100vh;
+}
+
 body {
-  font-size: clamp(10px, 2vw, 16px);
+  font-size: clamp(10px, 1vw, 18px);
   color: white;
   background-color: #000;
   margin: 0;
