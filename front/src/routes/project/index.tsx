@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { API_BASE_URL } from "@/api_url";
 
 export interface Project {
@@ -36,7 +37,8 @@ export interface Startup {
   news: string;
 }
 
-export default function ProjectPage({ id }: { id: number }) {
+export default function ProjectPage() {
+  const { id } = useParams<{ id: string }>();
   const [project, setProjects] = useState<Project>();
   const [startup, setStartup] = useState<Startup>();
 

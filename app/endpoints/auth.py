@@ -260,3 +260,10 @@ async def login(
 
     token = create_access_token({"id": user.id, "email": user.email})
     return AuthResponse(token=token)
+
+
+@router.get("/me")
+async def get_me(
+    db: AsyncSession = Depends(get_session), authorization: str = Header(None)
+):
+    return await get_user_from_token(db, authorization)

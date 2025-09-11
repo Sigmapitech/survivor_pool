@@ -10,8 +10,11 @@ export default function Navbar() {
       </Link>
 
       <div className="navbar-right">
-        <Link className="dash-in" to="/auth/login">
+        <Link className="dash-in" to="/catalog">
           Projects
+        </Link>
+        <Link className="dash-in" to="/dashboard">
+          Dashboard
         </Link>
         <Link className="dash-in" to="/auth/login">
           Login

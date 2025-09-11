@@ -39,7 +39,7 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
       <Route path="/admin/startup/project-register" element={<Image />} />
-      <Route path="/projectpage" element={<ProjectPage id={2} />} />
+      {/*<Route path="/projectpage/:id" element={<ProjectPage />} />*/}
       <Route path="/enterprise" element={<EnterprisePage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
     </Routes>
