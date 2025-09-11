@@ -67,7 +67,7 @@ export default function VerifyPage() {
         <h1>Verify</h1>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form className="gradient-card" onSubmit={handleSubmit}>
         <FormField
           type="text"
           name="code"

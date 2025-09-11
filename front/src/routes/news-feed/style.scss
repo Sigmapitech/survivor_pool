@@ -14,17 +14,7 @@
   gap: 1em;
   width: clamp(280px, 8vw, 420px);
   padding: 1em;
-
-  background: black;
   color: white;
-  border: 1px solid transparent;
-  border-image: linear-gradient(
-    180deg,
-    rgba(246, 174, 174, 1) 0%,
-    rgba(241, 133, 133, 1) 25%,
-    rgba(245, 112, 212, 1) 56%,
-    rgba(193, 116, 242, 1) 82%
-  ) 1;
 
   &-feed {
     padding-left: 1em;

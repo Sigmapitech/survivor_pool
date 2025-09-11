@@ -36,12 +36,7 @@
     display: grid;
     padding: max(2em, 24px);
     margin-bottom: 20px;
-    background: #17181a;
-    border: 1px solid black;
     grid-gap: 1.25em;
-
-    border: 1px solid transparent;
-    border-image: linear-gradient(180deg, rgb(246, 174, 174) 0%, rgb(241, 133, 133) 25%, rgb(245, 112, 212) 56%, rgb(193, 116, 242) 82%) 1;
 
     & + a {
       font-size: 1rem;
@@ -66,7 +61,7 @@
     &[type=text],
     &[type=password],
     &[type=email] {
-      background-color: #212026;
+      background-color: #221f33;
       color: white;
 
       &:focus, &:focus-visible {

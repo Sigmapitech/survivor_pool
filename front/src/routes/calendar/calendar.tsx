@@ -166,7 +166,7 @@ export default function CalendarPage() {
             <p className="empty">No events found.</p>
           ) : (
             filtered.map((event) => (
-              <div className="calendar-card" key={event.id}>
+              <div className="calendar-card gradient-card" key={event.id}>
                 <div className="calendar-card-meta">
                   <h2>{event.name}</h2>
                   <span className="type">{event.event_type || "Other"}</span>

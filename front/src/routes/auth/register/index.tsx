@@ -101,7 +101,7 @@ function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="gradient-card" onSubmit={handleSubmit}>
       {REGISTRATION_FIELDS.map((field) => (
         <FormField
           key={field.name}

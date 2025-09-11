@@ -15,7 +15,7 @@ export interface News {
 
 function News({ news }: { news: News }) {
   return (
-    <div className="news" key={news.id}>
+    <div className="news gradient-card" key={news.id}>
       <p>{news.title}</p>
       <div className="news-meta">
         <span>{news.news_date.toString()}</span>

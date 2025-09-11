@@ -54,9 +54,10 @@ a {
   }
 }
 
-.gradient-line {
-  background: black;
+.gradient-card {
+  background-color: #0d0d1a;
   border: 1px solid transparent;
+  box-shadow: 0 0 12px 8px rgb(0, 0, 0);
   border-image: linear-gradient(
     180deg,
     rgba(246, 174, 174, 1) 0%,

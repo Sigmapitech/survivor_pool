@@ -41,7 +41,7 @@ export default function LoginPage() {
         <h1>Sign In to Jeb-Incubator</h1>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form className="gradient-card" onSubmit={handleSubmit}>
         <div className="auth-box">
           <label htmlFor="email">Email</label>
           <input

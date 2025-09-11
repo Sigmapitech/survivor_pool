@@ -26,21 +26,27 @@ export default function DashboardPage() {
       <div className="dashboard-links dashboard-grid-3x2">
         {user?.role === "ADMIN" ? (
           <>
-            <Link className="dashboard-card" to="/admin/user-crud">
+            <Link
+              className="dashboard-card gradient-card"
+              to="/admin/user-crud"
+            >
               <span className="material-symbols-outlined">person</span>
               <div>
                 <h2>User Management</h2>
                 <p>Add, edit, delete users</p>
               </div>
             </Link>
-            <Link className="dashboard-card" to="/admin/startup-crud">
+            <Link
+              className="dashboard-card gradient-card"
+              to="/admin/startup-crud"
+            >
               <span className="material-symbols-outlined">business</span>
               <div>
                 <h2>Startup Management</h2>
                 <p>Add, edit, delete startups</p>
               </div>
             </Link>
-            <Link className="dashboard-card" to="/enterprise">
+            <Link className="dashboard-card gradient-card" to="/enterprise">
               <span className="material-symbols-outlined">folder</span>
               <div>
                 <h2>Project/Startup Management</h2>
@@ -52,21 +58,21 @@ export default function DashboardPage() {
           <></>
         )}
 
-        <Link className="dashboard-card" to="/catalog">
+        <Link className="dashboard-card gradient-card" to="/catalog">
           <span className="material-symbols-outlined">view_list</span>
           <div>
             <h2>Project Catalog</h2>
             <p>View and filter all projects</p>
           </div>
         </Link>
-        <Link className="dashboard-card" to="/calendar">
+        <Link className="dashboard-card gradient-card" to="/calendar">
           <span className="material-symbols-outlined">calendar_month</span>
           <div>
             <h2>Events Calendar</h2>
             <p>View and filter events</p>
           </div>
         </Link>
-        <Link className="dashboard-card" to="/news">
+        <Link className="dashboard-card gradient-card" to="/news">
           <span className="material-symbols-outlined">newspaper</span>
           <div>
             <h2>News Feed</h2>
