@@ -1,26 +1,50 @@
 .auth {
-  width: 24rem;
+  width: 28rem;
   margin: 0 auto;
   min-height: 100vh;
   color: #000;
   box-sizing: border-box;
   padding: 1em;
 
+  &-header h1 {
+    color: #f18585;
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+    padding: 1rem 2rem;
+    text-transform: uppercase;
+  }
+
   h1 {
     font-size: 1.5em;
     text-align: center;
   }
 
+  form, input {
+     box-sizing: border-box;
+  }
+
   form {
     display: grid;
-    padding: 1em;
+    padding: 2em;
     margin-bottom: 20px;
-    background: #fff;
+    background: #17181a;
     border: 1px solid black;
     grid-gap: 2em;
+
+    border: 1px solid transparent;
+    border-image: linear-gradient(180deg, rgb(246, 174, 174) 0%, rgb(241, 133, 133) 25%, rgb(245, 112, 212) 56%, rgb(193, 116, 242) 82%) 1;
+
+    & + a {
+      font-size: 1rem;
+    }
   }
 
   label {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #c174f2;
     display: flex;
     flex-flow: row wrap;
     grid-gap: 2em;
@@ -28,6 +52,26 @@
 
   input {
     width: 100%;
+    background-color: #212026;
+    color: white;
+    border: none;
+    padding: 4px;
+  }
+
+  p.error {
+    margin: 0;
+    color: #f18585;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .btn-validate {
+    background: #c174f2;
+    color: black;
+
+    &:hover {
+      background: #E4BEF8;
+    }
   }
 
   .actions {
