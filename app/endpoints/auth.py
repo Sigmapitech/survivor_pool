@@ -169,7 +169,11 @@ async def register(data: RegisterRequest, db: AsyncSession = Depends(get_session
     result = await db.execute(select(User).filter(User.email == data.email))
     collected = result.scalars().all()
     if len(collected) > 0:
-        raise HTTPException(status_code=400, detail="Account already exists")
+        return AuthResponse(
+            token=create_access_token(
+                {"id": collected[0].id, "email": collected[0].email}, timedelta(0)
+            )
+        )
 
     code = secrets.randbelow(10**6)
     user = User(
