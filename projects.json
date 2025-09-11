@@ -10,19 +10,14 @@
 		"logo": "/project_naucto.png"
 	},
 	{
-		"name": "Scylla",
-		"description": "Scylla is a continuous integration and deployment platform designed to be simple, accessible, and universal. Each pipeline step runs in an OCI-compliant container, ensuring complete isolation and compatibility with all supported runtimes. Scylla is built for everyone, including those who have never used CI/CD before. It offers a flexible, scalable, and easy-to-use solution, making it ideal for both beginners and experienced DevOps teams.",
-		"logo": "/project_scylla.png"
+		"name": "ÉloQuand ?",
+		"description": "Je pense, donc je suis. Et ce à quoi je pense, c’est à cette liberté que m’apporte l’éloquence. La parole… quel bonheur de pouvoir jouer avec les mots ! De ne pas se priver de transmettre une émotion, de faire vibrer ceux qui peuvent nous comprendre. Ce que je cherche, moi, c’est à améliorer l’éloquence du plus grand nombre de personnes possible. Pour cela, j’ai créé une application ! Mais qui suis-je ? Moi, je suis MrCoq, la mascotte de l’application imaginée par mes créateurs. Je suis celle qui vous accompagnera tout au long de votre progression dans l’art oratoire. Si je vous ai captivé jusqu’à présent, je tenais à vous rappeler que vous êtes en train de lire un texte écrit par une mascotte inventée de toutes pièces. Alors, entre vous et moi, qui est le plus fou ? À ce stade, rejoignez l’aventure : des dizaines d’exercices, de petites entourloupes, de stratagèmes et de beaux mots vous attendent !",
+		"logo": "/project_eloquand.png"
 	},
 	{
 		"name": "Fynex",
 		"description": "Fynex est une plateforme SaaS exploitant l’IA pour aider les jeunes investisseurs à optimiser leur portefeuille sans perdre de temps. Elle centralise et analyse vos données financières pour optimiser votre portefeuille en quelques clics. Grâce à des résumés d’actualités, des alertes personnalisées, l’analyse des tendances et l’évaluation des risques, Fynex vous permet d’accéder rapidement à l’info essentielle et de prendre des décisions éclairées, gagnant ainsi un temps précieux.",
 		"logo": "/project_fynex.png"
-	},
-	{
-		"name": "ÉloQuand ?",
-		"description": "Je pense, donc je suis. Et ce à quoi je pense, c’est à cette liberté que m’apporte l’éloquence. La parole… quel bonheur de pouvoir jouer avec les mots ! De ne pas se priver de transmettre une émotion, de faire vibrer ceux qui peuvent nous comprendre. Ce que je cherche, moi, c’est à améliorer l’éloquence du plus grand nombre de personnes possible. Pour cela, j’ai créé une application ! Mais qui suis-je ? Moi, je suis MrCoq, la mascotte de l’application imaginée par mes créateurs. Je suis celle qui vous accompagnera tout au long de votre progression dans l’art oratoire. Si je vous ai captivé jusqu’à présent, je tenais à vous rappeler que vous êtes en train de lire un texte écrit par une mascotte inventée de toutes pièces. Alors, entre vous et moi, qui est le plus fou ? À ce stade, rejoignez l’aventure : des dizaines d’exercices, de petites entourloupes, de stratagèmes et de beaux mots vous attendent !",
-		"logo": "/project_eloquand.png"
 	},
 	{
 		"name": "Tav N Wyvern",

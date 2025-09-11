@@ -28,7 +28,7 @@ main {
 
   position: relative;
 
-  background-image: linear-gradient(to bottom right, rgba(0,0,0,.7), rgba(0,0,0,.5) 70%);
+  background-image: linear-gradient(to bottom right, rgba(0,0,0,.9) 40%, rgba(0,0,0,.4) 100%);
 
   &::before, &::after {
     position: absolute;

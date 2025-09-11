@@ -81,7 +81,7 @@ export default function CatalogPage() {
           <p className="empty">No projects found.</p>
         ) : (
           filtered.map((project, _idx) => (
-            <div className="catalog-card" key={project.id}>
+            <div className="gradient-card catalog-card" key={project.id}>
               <div className="catalog-card-image">
                 <img
                   src={
