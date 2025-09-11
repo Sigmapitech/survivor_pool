@@ -11,7 +11,7 @@ class Message(BaseModel):
 class ProjectBase(BaseModel):
     logo: str | None = None
     name: str
-    descritpion: str
+    description: str
     worth: int
     nugget: int
     id: int

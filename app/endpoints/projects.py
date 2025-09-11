@@ -76,7 +76,7 @@ async def list_project(db: AsyncSession = Depends(get_session)):
         ProjectBase(
             logo=getattr(project, "logo"),
             name=getattr(project, "name"),
-            descritpion=getattr(project, "description"),
+            description=getattr(project, "description"),
             worth=getattr(project, "worth"),
             nugget=len(project.liked_by),
             id=getattr(project, "id"),
@@ -143,6 +143,7 @@ async def create_project(
     logo: UploadFile | None = File(None),
     name: str = Form(...),
     description: str = Form(...),
+    worth: int = Form(...),
     db: AsyncSession = Depends(get_session),
     authorization: str = Header(None),
 ) -> Message:
@@ -167,7 +168,7 @@ async def create_project(
         logo=str(filepath),
         name=name,
         description=description,
-        worth=0,
+        worth=worth,
         startup_id=startup_id,
     )
     db.add(project)

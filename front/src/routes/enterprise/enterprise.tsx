@@ -164,7 +164,12 @@ export default function EnterprisePage() {
     fetch(`${API_BASE_URL}/api/startups/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       method: "DELETE",
-    }).then(() => setStartups((prev) => prev.filter((s) => s.id !== id)));
+    })
+      .then((res) => {
+        if (res.status !== 204) return;
+        setStartups((prev) => prev.filter((s) => s.id !== id));
+      })
+      .catch(console.error);
   }
 
   return (

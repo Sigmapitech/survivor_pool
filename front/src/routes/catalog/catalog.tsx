@@ -39,7 +39,7 @@ export default function CatalogPage() {
         const nameMatch = p.name
           .toLowerCase()
           .includes(filter.name.toLowerCase());
-        const descMatch = p.descritpion
+        const descMatch = p.description
           .toLowerCase()
           .includes(filter.description.toLowerCase());
         const worthMatch =
@@ -98,7 +98,7 @@ export default function CatalogPage() {
               </div>
               <div className="catalog-card-meta">
                 <h2>{project.name}</h2>
-                <p>{project.descritpion}</p>
+                <p>{project.description}</p>
                 <div className="catalog-card-info">
                   <span className="worth">Worth: {project.worth}</span>
                   <span className="nugget">Likes: {project.nugget}</span>
