@@ -6,18 +6,25 @@
   box-sizing: border-box;
   padding: 1em;
 
-  &-header h1 {
-    color: #f18585;
-    font-family: "Montserrat", sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 1px;
-    padding: 1rem 2rem;
-    text-transform: uppercase;
-  }
+  &-header {
+    display: flex;
+    gap: 1.2em;
+    align-items: center;
 
-  h1 {
-    font-size: 1.5em;
-    text-align: center;
+    a {
+      font-size: 1.5rem;
+    }
+
+    h1 {
+      color: #f18585;
+      font-family: "Montserrat", sans-serif;
+      letter-spacing: 1px;
+      padding: 1rem 2rem;
+      text-transform: uppercase;
+      font-size: 1.2rem;
+      text-align: center;
+      text-wrap: nowrap;
+    }
   }
 
   form, input {
@@ -26,7 +33,7 @@
 
   form {
     display: grid;
-    padding: 2em;
+    padding: max(2em, 24px);
     margin-bottom: 20px;
     background: #17181a;
     border: 1px solid black;
@@ -52,10 +59,18 @@
 
   input {
     width: 100%;
-    background-color: #212026;
-    color: white;
-    border: none;
-    padding: 4px;
+    border: 2px solid transparent;
+    padding: 6px;
+
+    &[type=text], [type=password] {
+      background-color: #212026;
+      color: white;
+    }
+
+    &:focus, &:focus-visible {
+      border: 2px solid #f18585;
+      outline: none;
+    }
   }
 
   p.error {
@@ -75,6 +90,7 @@
   }
 
   .actions {
+    margin-top: 1em;
     display: flex;
     justify-content: space-around;
     flex-flow: row wrap;

@@ -42,6 +42,7 @@ export default function LoginPage() {
   return (
     <div className="auth">
       <div className="auth-header">
+        <Link to="/">←</Link>
         <h1>Sign In to Jeb-Incubator</h1>
       </div>
 
