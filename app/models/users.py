@@ -11,7 +11,7 @@ class User(Base, TableNameProvider):
     email = Column(String, nullable=False)
     auth = Column(String, nullable=True)
     name = Column(String, nullable=False)
-    role = Column(String, nullable=False)
+    role = Column(String, nullable=False, default="USER")
     founder_id = Column(Integer, ForeignKey("founder.id"), nullable=True)
     investor_id = Column(Integer, ForeignKey("investor.id"), nullable=True)
     verified_email = Column(Boolean)

@@ -1,6 +1,7 @@
 from typing import Sequence
 
-from fastapi import HTTPException, status
+from ..endpoints.auth import as_enough_perms, get_user_from_token
+from fastapi import HTTPException, Header, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -8,7 +9,14 @@ from ..models import Startup
 from ..schemas.startup import StartupCreate, StartupUpdate
 
 
-async def create_startup(db: AsyncSession, startup_in: StartupCreate) -> Startup:
+async def create_startup(
+    db: AsyncSession,
+    startup_in: StartupCreate,
+    authorization: str = Header(None),
+) -> Startup:
+    if not as_enough_perms("ADMIN", await get_user_from_token(db, authorization)):
+        raise HTTPException(403, "Not enough permissions")
+
     new_startup = Startup(**startup_in.model_dump())
     db.add(new_startup)
     await db.commit()
@@ -34,8 +42,13 @@ async def get_startups(
 
 
 async def update_startup(
-    db: AsyncSession, startup_id: int, startup_in: StartupUpdate
+    db: AsyncSession,
+    startup_id: int,
+    startup_in: StartupUpdate,
+    authorization: str = Header(None),
 ) -> Startup:
+    if not as_enough_perms("ADMIN", await get_user_from_token(db, authorization)):
+        raise HTTPException(403, "Not enough permissions")
     startup = await get_startup(db, startup_id)
 
     for key, value in startup_in.model_dump(exclude_unset=True).items():
@@ -46,7 +59,13 @@ async def update_startup(
     return startup
 
 
-async def delete_startup(db: AsyncSession, startup_id: int) -> None:
+async def delete_startup(
+    db: AsyncSession,
+    startup_id: int,
+    authorization: str = Header(None),
+) -> None:
+    if not as_enough_perms("ADMIN", await get_user_from_token(db, authorization)):
+        raise HTTPException(403, "Not enough permissions")
     startup = await get_startup(db, startup_id)
     await db.delete(startup)
     await db.commit()

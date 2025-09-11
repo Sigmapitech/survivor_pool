@@ -10,7 +10,7 @@ from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from app.schemas.users import PasswordStr
+from ..schemas.users import PasswordStr
 
 from ..config import settings
 from ..db import get_session
@@ -68,6 +68,35 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
+async def get_user_from_token(db: AsyncSession, authorization: str):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="No token, authorization denied")
+
+    token = authorization.split(" ")[1]
+    payload: dict[str, int] = decode_access_token(token)
+    id = payload.get("id")
+    if not id:
+        raise HTTPException(status_code=401, detail="Token is not valid")
+    result = await db.execute(select(User).where(User.id == id))
+    user = result.scalar()
+    if user is None:
+        raise HTTPException(404, detail="User not found")
+    return user
+
+
+def get_user_id_from_token(authorization: str) -> int:
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="No token, authorization denied")
+
+    token = authorization.split(" ")[1]
+    payload = decode_access_token(token)
+
+    id = payload.get("id")
+    if not id:
+        raise HTTPException(status_code=401, detail="Token is not valid")
+    return id
+
+
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
@@ -77,7 +106,6 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: PasswordStr
     name: str
-    role: str
 
 
 class VerificationRequest(BaseModel):
@@ -104,21 +132,28 @@ async def verify_user(
     db: AsyncSession = Depends(get_session),
     authorization: str = Header(None),
 ) -> Message:
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="No token, authorization denied")
-
-    token = authorization.split(" ")[1]
-    payload: dict[str, int] = decode_access_token(token)
-    result = await db.execute(select(User).where(User.id == payload.get("id")))
-    user = result.scalar()
-    if user is None:
-        raise HTTPException(404, detail="User not found")
-    logger.warning(user.verification_code, data.code)
+    user = await get_user_from_token(db, authorization)
     if getattr(user, "verification_code", None) != data.code:
         raise HTTPException(400, "Verification code is incorrect")
     setattr(user, "verified_email", True)
     await db.commit()
     return Message(message="Properly verified")
+
+
+async def is_verified(
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
+):
+    user = await get_user_from_token(db, authorization)
+    return getattr(user, "verified_email") == True
+
+
+PERMS = ("STARTUP", "ADMIN", "USER")
+
+
+def as_enough_perms(perm: str, user: User):
+    user_role = getattr(user, "role")
+    return user_role == "ADMIN" or user_role == perm
 
 
 @router.post(
@@ -142,7 +177,6 @@ async def register(data: RegisterRequest, db: AsyncSession = Depends(get_session
         auth=bcrypt.hash(data.password),
         email=data.email,
         name=data.name,
-        role=data.role,
         verified_email=False,
         verification_code=code,
     )
@@ -170,6 +204,38 @@ async def register(data: RegisterRequest, db: AsyncSession = Depends(get_session
         content_type="html",
     )
     return AuthResponse(token=token)
+
+
+@router.post(
+    "/resend",
+)
+async def resend_verification_code(
+    db: AsyncSession = Depends(get_session), authorization: str = Header(None)
+):
+    user = await get_user_from_token(db, authorization)
+    code = secrets.randbelow(10**6)
+
+    with open("app/templates/auth_verification.html") as file:
+        template_str = file.read()
+
+    jinja_template: Template = Template(template_str)
+    body = jinja_template.render(
+        verification_url=f"http://localhost:8000/api/auth/verify/",
+        verification_code=str(code).zfill(6),
+        current_year=datetime.now(timezone.utc).year,
+    )
+
+    setattr(user, "verification_code", code)
+    await db.commit()
+    await send_email(
+        EmailSchema(
+            to=getattr(user, "email"),
+            subject="Votre compte JEB - Confirmation de votre adresse mail",
+            body=body,
+        ),
+        content_type="html",
+    )
+    return Message(message="Mail resent correctly")
 
 
 @router.post(

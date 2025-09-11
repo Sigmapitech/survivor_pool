@@ -16,10 +16,10 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.models.users import User
+from ..models.users import User
 
 from ..db import get_session
-from ..helpers.user import get_user_id_from_token
+from .auth import as_enough_perms, get_user_from_token, get_user_id_from_token
 from ..jeb_schema import UserBase
 from ..models import Project
 from ..models.startups import Startup
@@ -145,8 +145,12 @@ async def create_project(
     name: str = Form(...),
     description: str = Form(...),
     db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
 ) -> Message:
     validate_image(logo)
+    if not as_enough_perms("ADMIN", await get_user_from_token(db, authorization)):
+        raise HTTPException(403, "Not enough permissions")
+
     ressult = await db.execute(select(Startup).filter(Startup.id == startup_id))
     startup = ressult.scalar()
     if not startup:
@@ -187,8 +191,11 @@ async def update_project(
     description: str = Form(...),
     logo: UploadFile | None = File(None),
     db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
 ) -> Message:
     validate_image(logo)
+    if not as_enough_perms("ADMIN", await get_user_from_token(db, authorization)):
+        raise HTTPException(403, "Not enough permissions")
     result = await db.execute(select(Project).filter(Project.id == project_id))
     project = result.scalar()
     if not project:
@@ -226,8 +233,11 @@ async def patch_project(
     description: str | None = Form(None),
     logo: UploadFile | None = File(None),
     db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
 ) -> Message:
     validate_image(logo)
+    if not as_enough_perms("ADMIN", await get_user_from_token(db, authorization)):
+        raise HTTPException(403, "Not enough permissions")
     result = await db.execute(select(Project).filter(Project.id == project_id))
     project = result.scalar()
     if not project:
@@ -261,11 +271,20 @@ async def patch_project(
         404: {"model": Message, "description": "Project not found"},
     },
 )
-async def delete_project(project_id: int, db: AsyncSession = Depends(get_session)):
+async def delete_project(
+    project_id: int,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
+):
+    if not as_enough_perms("ADMIN", await get_user_from_token(db, authorization)):
+        raise HTTPException(403, "Not enough permissions")
     result = await db.execute(select(Project).filter(Project.id == project_id))
     project = result.scalar()
     if not project:
         raise HTTPException(404, detail="Project not found")
+    path = getattr(project, "logo")
+    if path and Path(path).exists:
+        os.remove(Path(path))
     await db.delete(project)
     await db.commit()
 

@@ -20,11 +20,9 @@ class UpdateRequest(BaseModel):
     email: EmailStr
     password: PasswordStr
     name: str
-    role: str
 
 
 class PatchRequest(BaseModel):
     email: EmailStr | None = None
     password: PasswordStr | None = None
     name: str | None = None
-    role: str | None = None

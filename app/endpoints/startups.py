@@ -1,11 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Header, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app import crud_startup
-from app.schemas.startup import StartupCreate, StartupOut, StartupUpdate
+from .. import crud_startup
+from ..schemas.startup import StartupCreate, StartupOut, StartupUpdate
 
 from ..db import get_session
 from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint, get_image
@@ -43,9 +43,11 @@ async def get_founder_of_startup_image(
     },
 )
 async def create_startup(
-    startup: StartupCreate, db: AsyncSession = Depends(get_session)
+    startup: StartupCreate,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
 ):
-    return await crud_startup.create_startup(db, startup)
+    return await crud_startup.create_startup(db, startup, authorization)
 
 
 @router.put(
@@ -58,9 +60,12 @@ async def create_startup(
     },
 )
 async def update_startup(
-    startup_id: int, startup: StartupUpdate, db: AsyncSession = Depends(get_session)
+    startup_id: int,
+    startup: StartupUpdate,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
 ):
-    return await crud_startup.update_startup(db, startup_id, startup)
+    return await crud_startup.update_startup(db, startup_id, startup, authorization)
 
 
 @router.patch(
@@ -73,9 +78,12 @@ async def update_startup(
     },
 )
 async def patch_startup(
-    startup_id: int, startup: StartupUpdate, db: AsyncSession = Depends(get_session)
+    startup_id: int,
+    startup: StartupUpdate,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
 ):
-    return await crud_startup.update_startup(db, startup_id, startup)
+    return await crud_startup.update_startup(db, startup_id, startup, authorization)
 
 
 @router.delete(
@@ -86,5 +94,9 @@ async def patch_startup(
         404: {"model": Message, "description": "Startup not found"},
     },
 )
-async def delete_startup(startup_id: int, db: AsyncSession = Depends(get_session)):
-    await crud_startup.delete_startup(db, startup_id)
+async def delete_startup(
+    startup_id: int,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
+):
+    await crud_startup.delete_startup(db, startup_id, authorization)

@@ -1,6 +1,7 @@
 from typing import Sequence
 
-from fastapi import HTTPException, status
+from ..endpoints.auth import get_user_from_token
+from fastapi import HTTPException, Header
 from passlib.hash import bcrypt
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,22 +9,6 @@ from sqlalchemy.future import select
 
 from ..models import User
 from ..schemas.users import PatchRequest, UpdateRequest
-
-
-async def create_user(db: AsyncSession, user_in: UpdateRequest) -> User:
-    data = user_in.model_dump()
-
-    if "password" in data:
-        data["auth"] = bcrypt.hash(data.pop("password"))
-
-    if "email" in data and data["email"]:
-        data["email"] = str(data["email"])
-
-    new_user = User(**data)
-    db.add(new_user)
-    await db.commit()
-    await db.refresh(new_user)
-    return new_user
 
 
 async def get_user(db: AsyncSession, user_id: int) -> User | None:
@@ -46,8 +31,16 @@ async def get_users(
     return result.scalars().all()
 
 
-async def update_user(db: AsyncSession, user_id: int, user_in: UpdateRequest) -> User:
+async def update_user(
+    db: AsyncSession,
+    user_id: int,
+    user_in: UpdateRequest,
+    authorization: str = Header(None),
+) -> User:
+    requester = get_user_from_token(db, authorization)
     user = await get_user(db, user_id)
+    if requester != user:
+        raise HTTPException(403, "You are not the user")
 
     if getattr(user, "email") != user_in.email:
         result = await db.execute(select(User).filter(User.email == user_in.email))
@@ -71,9 +64,16 @@ async def update_user(db: AsyncSession, user_id: int, user_in: UpdateRequest) ->
     return user
 
 
-async def patch_user(db: AsyncSession, user_id: int, user_in: PatchRequest) -> User:
+async def patch_user(
+    db: AsyncSession,
+    user_id: int,
+    user_in: PatchRequest,
+    authorization: str = Header(None),
+) -> User:
+    requester = get_user_from_token(db, authorization)
     user = await get_user(db, user_id)
-
+    if requester != user:
+        raise HTTPException(403, "You are not the user")
     if user_in.email and getattr(user, "email") != user_in.email:
         result = await db.execute(select(User).filter(User.email == user_in.email))
         collected = result.scalars().all()
@@ -96,7 +96,14 @@ async def patch_user(db: AsyncSession, user_id: int, user_in: PatchRequest) -> U
     return user
 
 
-async def delete_user(db: AsyncSession, user_id: int) -> None:
+async def delete_user(
+    db: AsyncSession,
+    user_id: int,
+    authorization: str = Header(None),
+) -> None:
+    requester = get_user_from_token(db, authorization)
     user = await get_user(db, user_id)
+    if requester != user:
+        raise HTTPException(403, "You are not the user")
     await db.delete(user)
     await db.commit()

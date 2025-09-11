@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from passlib.hash import bcrypt
+from fastapi import APIRouter, Depends, Form, HTTPException, Header, status
 from pydantic import EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,6 +17,7 @@ from ..jeb_schema import UserBase
 from ..models import User
 from ..proxy_schema import Message
 from ..schemas.users import PatchRequest, UpdateRequest
+from .auth import get_user_from_token, as_enough_perms, PERMS
 
 router = APIRouter()
 
@@ -45,18 +45,6 @@ async def route_read_user_by_mail(
     return await get_user_by_email(db, email)
 
 
-@router.delete(
-    "/{user_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    description="Delete user",
-    responses={
-        404: {"model": Message, "description": "User not found"},
-    },
-)
-async def route_delete_user(user_id: int, db: AsyncSession = Depends(get_session)):
-    return await delete_user(db, user_id)
-
-
 @router.put(
     "/{user_id}",
     response_model=UserBase,
@@ -68,9 +56,12 @@ async def route_delete_user(user_id: int, db: AsyncSession = Depends(get_session
     },
 )
 async def route_update_user(
-    user_id: int, data: UpdateRequest, db: AsyncSession = Depends(get_session)
+    user_id: int,
+    data: UpdateRequest,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
 ) -> UserBase:
-    return await update_user(db, user_id, data)
+    return await update_user(db, user_id, data, authorization)
 
 
 @router.patch(
@@ -84,6 +75,47 @@ async def route_update_user(
     },
 )
 async def route_patch_user(
-    user_id: int, data: PatchRequest, db: AsyncSession = Depends(get_session)
+    user_id: int,
+    data: PatchRequest,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
 ) -> UserBase:
-    return await patch_user(db, user_id, data)
+    return await patch_user(db, user_id, data, authorization)
+
+
+@router.delete(
+    "/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    description="Delete user",
+    responses={
+        404: {"model": Message, "description": "User not found"},
+    },
+)
+async def route_delete_user(
+    user_id: int,
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
+):
+    return await delete_user(db, user_id, authorization)
+
+
+@router.post("/{user_id}")
+async def route_assign_perm(
+    user_id: int,
+    user_role: str = Form(...),
+    db: AsyncSession = Depends(get_session),
+    authorization: str = Header(None),
+):
+    requester = await get_user_from_token(db, authorization)
+    if not as_enough_perms("ADMIN", requester):
+        raise HTTPException(403, "Not enough permissions")
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar()
+    if user is None:
+        raise HTTPException(404, detail="User not found")
+    if user_role not in PERMS:
+        raise HTTPException(400, "Unknown role")
+    setattr(user, "role", user_role)
+    await db.commit()
+    await db.refresh(user)
+    return user
