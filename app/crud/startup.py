@@ -1,5 +1,6 @@
 from typing import Sequence
 
+from ..models.founders import Founder
 from fastapi import Header, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,13 +16,23 @@ async def create_startup(
     startup_in: StartupCreate,
     authorization: str = Header(None),
 ) -> Startup:
-    if not as_enough_perms("ADMIN", await get_user_from_token(db, authorization)):
+    user = await get_user_from_token(db, authorization)
+    if not as_enough_perms("ADMIN", user):
         raise HTTPException(403, "Not enough permissions")
 
     new_startup = Startup(**startup_in.model_dump())
+    new_founder = Founder(name=user.name, startup=new_startup)
+    db.add(new_founder)
     db.add(new_startup)
     await db.commit()
     await db.refresh(new_startup)
+    new_startup = (
+        await db.execute(
+            select(Startup)
+            .where(Startup.id == new_startup.id)
+            .options(selectinload(Startup.founders))
+        )
+    ).scalar_one()
     return new_startup
 
 

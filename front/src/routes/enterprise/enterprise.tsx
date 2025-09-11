@@ -121,7 +121,7 @@ export default function EnterprisePage() {
     const method = editingStartup ? "PUT" : "POST";
     const url = editingStartup
       ? `${API_BASE_URL}/api/startups/${editingStartup.id}`
-      : `${API_BASE_URL}/api/startups`;
+      : `${API_BASE_URL}/api/startups/`;
     const body = JSON.stringify(startupForm);
 
     fetch(url, {
