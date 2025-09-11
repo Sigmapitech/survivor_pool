@@ -14,6 +14,7 @@ import CatalogPage from "@/routes/catalog/catalog";
 import Home from "@/routes/home";
 import Image from "@/routes/image";
 import NewsPage from "@/routes/news-feed";
+import DashboardPage from "./routes/dashboard/dashboard";
 import EnterprisePage from "./routes/enterprise/enterprise";
 import ProjectPage from "./routes/project";
 
@@ -38,6 +39,7 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/startup/project-register" element={<Image />} />
       <Route path="/projectpage" element={<ProjectPage id={2} />} />
       <Route path="/enterprise" element={<EnterprisePage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
     </Routes>
   </BrowserRouter>
 );
