@@ -42,11 +42,11 @@ export default function VerifyPage() {
     });
   };
 
-  const resendMail = async (e) => {
+  const resendMail = async (e: any) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/resend`, {
+      await fetch(`${API_BASE_URL}/api/auth/resend`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
