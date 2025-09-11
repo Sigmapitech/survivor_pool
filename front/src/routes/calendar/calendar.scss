@@ -45,12 +45,19 @@
   .calendar-card {
     background: #23232a;
     border-radius: 12px;
-    box-shadow: 0 2px 16px #000a;
+    /* Gradient border instead of box-shadow */
+    border: 1px solid transparent;
+    border-image: linear-gradient(
+      180deg,
+      rgba(246, 174, 174, 1) 0%,
+      rgba(241, 133, 133, 1) 25%,
+      rgba(245, 112, 212, 1) 56%,
+      rgba(193, 116, 242, 1) 82%
+    ) 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     transition: transform 0.2s;
-    border: 1px solid #31343c;
 
     &:hover {
       transform: translateY(-4px) scale(1.02);
