@@ -42,7 +42,9 @@ export default function NewsPage() {
   const [news, setNews] = useState<News[] | null>(null);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/news/`)
+    fetch(`${API_BASE_URL}/api/news/`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((res) => res.json())
       .then((list: News[]) => setNews(list))
       .catch(console.error);

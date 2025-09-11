@@ -41,14 +41,20 @@ export default function ProjectPage({ id }: { id: number }) {
   const [startup, setStartup] = useState<Startup>();
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/projects/${id}`)
+    fetch(`${API_BASE_URL}/api/projects/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((project: Project) => setProjects(project))
       .catch(console.error);
   }, [id]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/startups/${project?.startup_id}`)
+    fetch(`${API_BASE_URL}/api/startups/${project?.startup_id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((res) => res.json())
       .then((startup: Startup) => setStartup(startup))
       .catch(console.error);

@@ -29,6 +29,7 @@ export async function handleFormSubmit<T>({
     const response = await fetch(url, {
       method,
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),

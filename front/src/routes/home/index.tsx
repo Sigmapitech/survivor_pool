@@ -38,7 +38,9 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[] | null>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/projects/`)
+    fetch(`${API_BASE_URL}/api/projects/`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((res) => res.json())
       .then((list: Project[]) => setProjects(list.slice(0, 5)))
       .catch(console.error);

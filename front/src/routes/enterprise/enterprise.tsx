@@ -43,11 +43,17 @@ export default function EnterprisePage() {
 
   // Fetch projects and startups
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/projects/`)
+    fetch(`${API_BASE_URL}/api/projects/`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((res) => res.json())
       .then(setProjects);
 
-    fetch(`${API_BASE_URL}/api/startups`)
+    fetch(`${API_BASE_URL}/api/startups`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => res.json())
       .then(setStartups);
   }, []);
@@ -70,6 +76,7 @@ export default function EnterprisePage() {
     }
 
     fetch(url, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       method,
       body: formData,
     }).then(() => {
@@ -82,7 +89,9 @@ export default function EnterprisePage() {
         startup_id: "",
       });
       // Refresh
-      fetch(`${API_BASE_URL}/api/projects/`)
+      fetch(`${API_BASE_URL}/api/projects/`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
         .then((res) => res.json())
         .then(setProjects);
     });
@@ -100,9 +109,10 @@ export default function EnterprisePage() {
   }
 
   function handleDeleteProject(id: number) {
-    fetch(`${API_BASE_URL}/api/projects/${id}`, { method: "DELETE" }).then(() =>
-      setProjects((prev) => prev.filter((p) => p.id !== id))
-    );
+    fetch(`${API_BASE_URL}/api/projects/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      method: "DELETE",
+    }).then(() => setProjects((prev) => prev.filter((p) => p.id !== id)));
   }
 
   // Startup CRUD
@@ -116,7 +126,10 @@ export default function EnterprisePage() {
 
     fetch(url, {
       method,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body,
     }).then(() => {
       setEditingStartup(null);
@@ -128,7 +141,9 @@ export default function EnterprisePage() {
         description: "",
       });
       // Refresh
-      fetch(`${API_BASE_URL}/api/startups`)
+      fetch(`${API_BASE_URL}/api/startups`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
         .then((res) => res.json())
         .then(setStartups);
     });
@@ -146,9 +161,10 @@ export default function EnterprisePage() {
   }
 
   function handleDeleteStartup(id: number) {
-    fetch(`${API_BASE_URL}/api/startups/${id}`, { method: "DELETE" }).then(() =>
-      setStartups((prev) => prev.filter((s) => s.id !== id))
-    );
+    fetch(`${API_BASE_URL}/api/startups/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      method: "DELETE",
+    }).then(() => setStartups((prev) => prev.filter((s) => s.id !== id)));
   }
 
   return (

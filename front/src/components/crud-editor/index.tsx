@@ -26,7 +26,9 @@ export default function CrudTable<T extends { id: number }>({
   const [formData, setFormData] = useState<Partial<T>>({});
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/${entityPath}`)
+    fetch(`${API_BASE_URL}/api/${entityPath}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((res) => res.json())
       .then((list: T[]) => setData(list))
       .catch(console.error);
@@ -50,7 +52,10 @@ export default function CrudTable<T extends { id: number }>({
     if (!editingId) return;
     const res = await fetch(`${API_BASE_URL}/api/${entityPath}/${editingId}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: JSON.stringify(formData),
     });
 
@@ -68,6 +73,7 @@ export default function CrudTable<T extends { id: number }>({
   const deleteRow = async (id: number) => {
     if (!window.confirm("Delete this item?")) return;
     const res = await fetch(`${API_BASE_URL}/api/${entityPath}/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       method: "DELETE",
     });
     if (res.ok) {

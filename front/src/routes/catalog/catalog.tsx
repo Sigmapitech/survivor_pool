@@ -21,7 +21,11 @@ export default function CatalogPage() {
   });
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/projects/`)
+    fetch(`${API_BASE_URL}/api/projects/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data: Project[]) => {
         setProjects(data);

@@ -23,6 +23,9 @@ export default function ImageForm() {
       const response = await fetch(`${API_BASE_URL}/api/projects/${2}`, {
         method: "POST",
         body: formdata,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       if (!response.ok) {

@@ -55,7 +55,9 @@ export default function CalendarPage() {
   const [calendarMode, setCalendarMode] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/events`)
+    fetch(`${API_BASE_URL}/api/events`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((res) => res.json())
       .then((data: Event[]) => {
         setEvents(data);
