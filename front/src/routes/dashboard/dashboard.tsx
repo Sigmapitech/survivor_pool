@@ -22,7 +22,7 @@ export default function DashboardPage() {
 
   return (
     <div className="dashboard">
-      <h1>Admin Dashboard</h1>
+      <h1>Dashboard</h1>
       <div className="dashboard-links dashboard-grid-3x2">
         {user?.role === "ADMIN" ? (
           <>

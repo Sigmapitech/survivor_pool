@@ -30,6 +30,8 @@ ReactDOM.createRoot(root).render(
         <Route path="/news" element={<NewsPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/enterprise" element={<EnterprisePage />} />
       </Route>
 
       <Route path="/auth/login" element={<Login />} />
@@ -40,8 +42,6 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
       <Route path="/admin/startup/project-register" element={<Image />} />
       {/*<Route path="/projectpage/:id" element={<ProjectPage />} />*/}
-      <Route path="/enterprise" element={<EnterprisePage />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
     </Routes>
   </BrowserRouter>
 );
