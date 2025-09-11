@@ -13,20 +13,20 @@ import FormSubmitButton, {
 
 const REGISTRATION_FIELDS = [
   {
-    label: "Email",
-    name: "email",
-    type: "email",
-    placeholder: "Email",
-    pattern: ".+@.+",
-    title: "Please enter a valid email address",
-  },
-  {
     label: "Username",
     name: "username",
     type: "text",
     placeholder: "Username",
     pattern: "^[a-zA-Z0-9_]{3,20}$",
     title: "3-20 characters, letters, numbers, underscores only",
+  },
+  {
+    label: "Email",
+    name: "email",
+    type: "email",
+    placeholder: "Email",
+    pattern: ".+@.+",
+    title: "Please enter a valid email address",
   },
   {
     label: "Password",
@@ -67,19 +67,16 @@ function RegisterForm() {
     }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setError("");
+
+    if (!e.currentTarget.form?.checkValidity()) return;
+    e.preventDefault();
 
     const { email, username, invitation, password, confirmPassword } = formData;
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
-      return;
-    }
-
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters");
       return;
     }
 
@@ -119,7 +116,7 @@ function RegisterForm() {
       <div className="actions">
         <FormSubmitButton
           value="Create your account now"
-          submitCallback={handleSubmit}
+          onClick={handleSubmit}
         />
       </div>
     </form>

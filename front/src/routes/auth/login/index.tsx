@@ -1,4 +1,3 @@
-import type { FormEvent } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
@@ -16,9 +15,11 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     setError("");
+
+    if (!e.currentTarget.form?.checkValidity()) return;
+    e.preventDefault();
 
     handleFormSubmit({
       url: `${API_BASE_URL}/api/auth/login`,
@@ -63,7 +64,7 @@ export default function LoginPage() {
         {error && <p className="error">{error}</p>}
 
         <div className="actions">
-          <FormSubmitButton value="Sign in" submitCallback={handleSubmit} />
+          <FormSubmitButton value="Sign in" onClick={handleSubmit} />
         </div>
       </form>
       <Link to="/auth/register">Create an account</Link>

@@ -1,5 +1,3 @@
-import type { FormEvent } from "react";
-
 export { handleFormSubmit } from "./handleFormSubmit";
 
 import "./style.scss";
@@ -7,22 +5,16 @@ import "./style.scss";
 interface FormSubmitButtonProps {
   value: string;
   className?: string;
-  submitCallback: (e: FormEvent<HTMLFormElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function FormSubmitButton({
   value,
   className = "btn-validate",
-  submitCallback,
+  onClick,
 }: FormSubmitButtonProps) {
   return (
-    <button
-      type="submit"
-      className={className}
-      onClick={(e) => {
-        if (submitCallback) submitCallback(e);
-      }}
-    >
+    <button type="submit" className={className} onClick={onClick}>
       {value}
     </button>
   );
