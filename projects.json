@@ -1,0 +1,47 @@
+[
+	{
+		"name": "FoodStream",
+		"description": "FoodStream est une plateforme de live cuisine interactive et accessible à tous, permettant de cuisiner ensemble, en visio.📹 L’app suggère des lives selon vos ingrédients et propose des filtres par temps de préparation, date, type de plat... .🍰​",
+		"logo": "/project_foodstream.png"
+	},
+	{
+		"name": "Naucto",
+		"description": "Une plateforme de développement de jeux vidéos rétro 8-bit intégré avec des outils de collaboration en simultané dans le navigateur. Programmer, dessiner des sprites, composer des effets sonores et de la musique, réaliser les niveaux, il n'y a pas besoin de logiciels externes à installer et les jeux peuvent être partagés simplement avec des liens !",
+		"logo": "/project_naucto.png"
+	},
+	{
+		"name": "Scylla",
+		"description": "Scylla is a continuous integration and deployment platform designed to be simple, accessible, and universal. Each pipeline step runs in an OCI-compliant container, ensuring complete isolation and compatibility with all supported runtimes. Scylla is built for everyone, including those who have never used CI/CD before. It offers a flexible, scalable, and easy-to-use solution, making it ideal for both beginners and experienced DevOps teams.",
+		"logo": "/project_scylla.png"
+	},
+	{
+		"name": "Fynex",
+		"description": "Fynex est une plateforme SaaS exploitant l’IA pour aider les jeunes investisseurs à optimiser leur portefeuille sans perdre de temps. Elle centralise et analyse vos données financières pour optimiser votre portefeuille en quelques clics. Grâce à des résumés d’actualités, des alertes personnalisées, l’analyse des tendances et l’évaluation des risques, Fynex vous permet d’accéder rapidement à l’info essentielle et de prendre des décisions éclairées, gagnant ainsi un temps précieux.",
+		"logo": "/project_fynex.png"
+	},
+	{
+		"name": "ÉloQuand ?",
+		"description": "Je pense, donc je suis. Et ce à quoi je pense, c’est à cette liberté que m’apporte l’éloquence. La parole… quel bonheur de pouvoir jouer avec les mots ! De ne pas se priver de transmettre une émotion, de faire vibrer ceux qui peuvent nous comprendre. Ce que je cherche, moi, c’est à améliorer l’éloquence du plus grand nombre de personnes possible. Pour cela, j’ai créé une application ! Mais qui suis-je ? Moi, je suis MrCoq, la mascotte de l’application imaginée par mes créateurs. Je suis celle qui vous accompagnera tout au long de votre progression dans l’art oratoire. Si je vous ai captivé jusqu’à présent, je tenais à vous rappeler que vous êtes en train de lire un texte écrit par une mascotte inventée de toutes pièces. Alors, entre vous et moi, qui est le plus fou ? À ce stade, rejoignez l’aventure : des dizaines d’exercices, de petites entourloupes, de stratagèmes et de beaux mots vous attendent !",
+		"logo": "/project_eloquand.png"
+	},
+	{
+		"name": "Tav N Wyvern",
+		"description": "Tav N Wyvern est un éditeur de jeu de rôle qui a pour vocation de rendre plus accessible cet univers. Il comprend des outils de création de personnage, d'édition et de gestion de campagnes avec ou sans maître du jeu. Il est possible de créer des parties privées, le maître du jeu invite les joueurs pour sa campagne ou les joueurs choisissent une aventure scénarisée à partager ensemble.",
+		"logo": "/project_tav.png"
+	},
+	{
+		"name": "Eurydice",
+		"description": "Eurydice est une application conçue pour aider les personnes ayant des difficultés de concentration ou des problèmes d'attention à rester focalisées sur leurs tâches quotidiennes.",
+		"logo": "/project_eury.png"
+	},
+	{
+		"name": "Alive",
+		"description": "réimaginez l’expérience de transports conventionnés en taxi avec alive. en france, plus de 40 000 taxis conventionnés fonctionnent avec un système de réservation dépassé. en cas de maladie ou d’accident, nous vous connectons à un chauffeur via un bon de transport fourni par votre assurance.",
+		"logo": "/project_alive.png"
+	},
+	{
+		"name": "Nidalheim",
+		"description": "Un jeu de survie RPG où la mythologie nordique prend vie grâce à une IA évolutive. Dans un monde impitoyable, chaque PNJ réagit à vos choix, chaque quête se façonne selon vos actions, et chaque décision peut changer votre destin. Parlez aux PNJ, influencez l’histoire et luttez pour votre survie. ",
+		"logo": "/project_nid.png"
+	}
+]
