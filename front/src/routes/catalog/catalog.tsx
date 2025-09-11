@@ -86,7 +86,7 @@ export default function CatalogPage() {
                 <img
                   src={
                     project.logo.startsWith("app/static")
-                      ? `${API_BASE_URL}/${project.logo}`
+                      ? `${API_BASE_URL}/${project.logo.substring(4)}`
                       : project.logo
                   }
                   alt={project.name}

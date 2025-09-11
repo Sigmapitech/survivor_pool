@@ -14,6 +14,7 @@ export interface Project {
 }
 
 function Project({ project }: { project: Project }) {
+  console.log(`${API_BASE_URL}/${project.logo.substring(4)}`);
   return (
     <div className="project-card gradient-card" key={project.id}>
       <div className="project-card-meta">
@@ -22,7 +23,7 @@ function Project({ project }: { project: Project }) {
       </div>
       <div className="project-card-image">
         <img
-          src={`${API_BASE_URL}/${project.logo}`}
+          src={`${API_BASE_URL}/${project.logo.substring(4)}`}
           alt={project.name}
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).src =

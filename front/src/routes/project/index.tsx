@@ -70,7 +70,7 @@ export default function ProjectPage() {
         <h3>{project.name}</h3>
         <br />
         <img
-          src={`${API_BASE_URL}/${project.logo}`}
+          src={`${API_BASE_URL}/${project.logo.substring(4)}`}
           alt={project.name}
           className="project-logo"
           onError={(e) => {

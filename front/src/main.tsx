@@ -15,7 +15,6 @@ import CatalogPage from "@/routes/catalog/catalog";
 import DashboardPage from "@/routes/dashboard/dashboard";
 import EnterprisePage from "@/routes/enterprise/enterprise";
 import Home from "@/routes/home";
-import Image from "@/routes/image";
 import NewsPage from "@/routes/news-feed";
 import NotFoundPage from "@/routes/not-found";
 import ProjectPage from "./routes/project";
@@ -41,7 +40,6 @@ ReactDOM.createRoot(root).render(
 
       <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
-      <Route path="/admin/startup/project-register" element={<Image />} />
       <Route path="/projectpage/:id" element={<ProjectPage />} />
 
       <Route path="*" element={<NotFoundPage />} />
