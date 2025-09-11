@@ -1,12 +1,15 @@
-.btn-validate {
+.btn {
   width: 100%;
   border: 2px solid transparent;
   padding: .5rem;
-  background: #c174f2;
   color: black;
 
   &:hover, &:focus-visible {
     background: #E4BEF8;
     outline: none;
+  }
+
+  &-validate {
+    background: #c174f2;
   }
 }

@@ -107,3 +107,16 @@
     margin-top: 0;
   }
 }
+
+.btn-red {
+  background-color: #f18585;
+}
+
+.multi-actions {
+  display: flex;
+  gap: 1em;
+
+  & > * {
+    width: 100%;
+  }
+}

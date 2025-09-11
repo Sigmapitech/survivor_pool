@@ -42,13 +42,29 @@ export default function VerifyPage() {
     });
   };
 
+  const resendMail = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/resend`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div className="auth">
       <div className="auth-header">
         <Link to="/">
           <span className="material-symbols-outlined">arrow_left_alt</span>
         </Link>
-        <h1>Sign In to Jeb-Incubator</h1>
+        <h1>Verify</h1>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -63,8 +79,13 @@ export default function VerifyPage() {
 
         {error && <p className="error">{error}</p>}
 
-        <div className="actions">
-          <FormSubmitButton value="Sign in" />
+        <div className="multi-actions">
+          <FormSubmitButton
+            onClick={resendMail}
+            className="btn-red"
+            value="Resend mail"
+          />
+          <FormSubmitButton value="Validate" />
         </div>
       </form>
       <Link to="/auth/register">Create an account</Link>
