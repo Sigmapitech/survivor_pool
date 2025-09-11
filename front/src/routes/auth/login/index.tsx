@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router";
 import "../auth.scss";
 
 import { API_BASE_URL } from "@/api_url.ts";
+import PasswordInput from "@/components/auth/passwordInput";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -59,12 +60,10 @@ export default function LoginPage() {
         </div>
         <div className="auth-box">
           <label htmlFor="password">Password</label>
-          <input
-            type="password"
+          <PasswordInput
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
         </div>
 
