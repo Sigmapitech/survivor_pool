@@ -14,3 +14,4 @@ class ProjectBase(BaseModel):
     descritpion: str
     worth: int
     nugget: int
+    id: int

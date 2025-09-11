@@ -80,6 +80,7 @@ async def list_project(db: AsyncSession = Depends(get_session)):
             descritpion=getattr(project, "description"),
             worth=getattr(project, "worth"),
             nugget=len(project.liked_by),
+            id=getattr(project, "id"),
         )
         for project in result.scalars().all()
     ]
