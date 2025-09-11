@@ -80,6 +80,7 @@ async def list_project(db: AsyncSession = Depends(get_session)):
             worth=getattr(project, "worth"),
             nugget=len(project.liked_by),
             id=getattr(project, "id"),
+            startup_id=getattr(project, "startup_id"),
         )
         for project in result.scalars().all()
     ]
@@ -103,7 +104,15 @@ async def read_project(project_id: int, db: AsyncSession = Depends(get_session))
     collected = result.scalars().first()
     if not collected:
         raise HTTPException(404, detail="Not Found")
-    return ProjectBase(**collected, nugget=len(collected.liked_by))
+    return ProjectBase(
+        id=getattr(collected, "id"),
+        logo=getattr(collected, "logo"),
+        name=getattr(collected, "name"),
+        description=getattr(collected, "description"),
+        worth=getattr(collected, "worth"),
+        nugget=len(collected.liked_by),
+        startup_id=getattr(collected, "startup_id"),
+    )
 
 
 @router.get(

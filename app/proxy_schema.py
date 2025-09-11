@@ -15,3 +15,4 @@ class ProjectBase(BaseModel):
     worth: int
     nugget: int
     id: int
+    startup_id: int

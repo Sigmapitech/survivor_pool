@@ -54,6 +54,7 @@ export default function ProjectPage() {
   }, [id]);
 
   useEffect(() => {
+    if (project?.startup_id === undefined) return;
     fetch(`${API_BASE_URL}/api/startups/${project?.startup_id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
@@ -62,48 +63,45 @@ export default function ProjectPage() {
       .catch(console.error);
   }, [project?.startup_id]);
 
+  if (!project) return <p>"Loading project..."</p>;
   return (
     <div>
-      {project ? (
-        <div className="project-id" key={project.id}>
-          <h3>{project.name}</h3>
-          <br />
-          <img
-            src={`${API_BASE_URL}/${project.logo}`}
-            alt={project.name}
-            className="project-logo"
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src =
-                "https://placehold.co/600x400/EED5FB/31343C";
-            }}
-          />
-          <div className="project-meta">
-            <span>Founders:</span>
-            {startup?.founders?.map((founder) => (
-              <div key={founder.name} className="founder-name">
-                {founder.name}{" "}
-              </div>
-            ))}
-            <br />
-            <span>Nuggets: {project.nugget}</span>
-            <br />
-            <span>{project.description}</span>
-            <br />
-            <span>Progress: [insert progress here]</span>
-            <br />
-            <span>Needs: {startup?.needs}</span>
-            <div className="social-media">
-              <span>Contact</span>
-              <ul>Email: {startup?.email}</ul>
-              <ul>Phone number: {startup?.phone}</ul>
-              <ul>Site: {startup?.website_url}</ul>
-              <ul>Other media: {startup?.social_media_url}</ul>
+      <div className="project-id" key={project.id}>
+        <h3>{project.name}</h3>
+        <br />
+        <img
+          src={`${API_BASE_URL}/${project.logo}`}
+          alt={project.name}
+          className="project-logo"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src =
+              "https://placehold.co/600x400/EED5FB/31343C";
+          }}
+        />
+        <div className="project-meta">
+          <span>Founders:</span>
+          {startup?.founders?.map((founder) => (
+            <div key={founder.name} className="founder-name">
+              {founder.name}
             </div>
+          ))}
+          <br />
+          <span>Nuggets: {project.nugget}</span>
+          <br />
+          <span>{project.description}</span>
+          <br />
+          <span>Progress: {startup?.project_status}</span>
+          <br />
+          <span>Needs: {startup?.needs}</span>
+          <div className="social-media">
+            <span>Contact</span>
+            <ul>Email: {startup?.email}</ul>
+            <ul>Phone number: {startup?.phone}</ul>
+            <ul>Site: {startup?.website_url}</ul>
+            <ul>Other media: {startup?.social_media_url}</ul>
           </div>
         </div>
-      ) : (
-        <p>Loading project...</p>
-      )}
+      </div>
     </div>
   );
 }
