@@ -5,7 +5,8 @@
   background: #c174f2;
   color: black;
 
-  &:hover {
+  &:hover, &:focus-visible {
     background: #E4BEF8;
+    outline: none;
   }
 }

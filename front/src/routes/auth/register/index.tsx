@@ -19,6 +19,7 @@ const REGISTRATION_FIELDS = [
     placeholder: "Username",
     pattern: "^[a-zA-Z0-9_]{3,20}$",
     title: "3-20 characters, letters, numbers, underscores only",
+    autocomplete: "off",
   },
   {
     label: "Email",
@@ -67,10 +68,10 @@ function RegisterForm() {
     }));
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setError("");
 
-    if (!e.currentTarget.form?.checkValidity()) return;
+    if (!e.currentTarget.checkValidity()) return;
     e.preventDefault();
 
     const { email, username, invitation, password, confirmPassword } = formData;
@@ -114,10 +115,7 @@ function RegisterForm() {
       {error && <p className="error">{error}</p>}
 
       <div className="actions">
-        <FormSubmitButton
-          value="Create your account now"
-          onClick={handleSubmit}
-        />
+        <FormSubmitButton value="Create your account now" />
       </div>
     </form>
   );

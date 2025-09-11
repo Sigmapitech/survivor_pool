@@ -15,10 +15,10 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     setError("");
 
-    if (!e.currentTarget.form?.checkValidity()) return;
+    if (!e.currentTarget.checkValidity()) return;
     e.preventDefault();
 
     handleFormSubmit({
@@ -64,7 +64,7 @@ export default function LoginPage() {
         {error && <p className="error">{error}</p>}
 
         <div className="actions">
-          <FormSubmitButton value="Sign in" onClick={handleSubmit} />
+          <FormSubmitButton value="Sign in" />
         </div>
       </form>
       <Link to="/auth/register">Create an account</Link>

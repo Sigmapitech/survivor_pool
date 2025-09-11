@@ -8,6 +8,7 @@ interface FormFieldProps {
     placeholder?: string;
     pattern?: string;
     title?: string;
+    autocomplete?: string;
   };
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -35,6 +36,7 @@ export default function FormField({ field, value, onChange }: FormFieldProps) {
           required
           pattern={field.pattern}
           title={field.title}
+          autoComplete={field.autocomplete}
         />
       )}
     </div>
