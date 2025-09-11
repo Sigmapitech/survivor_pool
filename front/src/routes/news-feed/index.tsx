@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/api_url";
 
+import "./style.scss";
+
 export interface News {
   id: number;
   logo: string;
@@ -8,26 +10,20 @@ export interface News {
   title: string;
   category: string;
   startup_id: string;
-  description: string;
   news_date: Date;
 }
 
-function Newss({ news }: { news: News }) {
+function News({ news }: { news: News }) {
   return (
-    <div className="News" key={news.id}>
-      <h3>{news.title}</h3>
-      <p>{news.description}</p>
+    <div className="news" key={news.id}>
+      <p>{news.title}</p>
       <div className="news-meta">
-        <span>Date: {news.news_date.toString()}</span>
-        <br />
-        <span>Location: {news.location}</span>
-        <br />
+        <span>{news.news_date.toString()}</span>
+        <span>{news.location}</span>
       </div>
       <img
         src={`${API_BASE_URL}/api/news/${news.id}/image`}
         alt={news.title}
-        width="600px"
-        height="400px"
         className="news-logo"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).src =
@@ -53,7 +49,7 @@ export default function NewsPage() {
   if (news === null) {
     return (
       <section className="news-feed">
-        <h2>News</h2>
+        <h1>News</h1>
         <div className="news-list">
           <p>Loading news...</p>
         </div>
@@ -64,7 +60,6 @@ export default function NewsPage() {
   if (news.length === 0) {
     return (
       <section className="news-feed">
-        <h2>News</h2>
         <div className="news-list">
           <p>No news available at the moment.</p>
         </div>
@@ -80,8 +75,8 @@ export default function NewsPage() {
   }, {});
 
   return (
-    <section className="news-feed space-y-8">
-      <h2>News</h2>
+    <section className="news-feed">
+      <h1>News</h1>
 
       {Object.entries(grouped).map(([category, items]) => {
         const sortedItems = [...items].sort(
@@ -90,14 +85,14 @@ export default function NewsPage() {
         );
 
         return (
-          <div key={category}>
-            <h3 className="text-xl font-semibold">{category}</h3>
-            <div className="news-list grid grid-cols-3 gap-4">
+          <section className="news-category" key={category}>
+            <h3>{category}</h3>
+            <div className="news-list">
               {sortedItems.map((n) => (
-                <Newss key={n.id} news={n} />
+                <News key={n.id} news={n} />
               ))}
             </div>
-          </div>
+          </section>
         );
       })}
     </section>
