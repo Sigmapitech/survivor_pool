@@ -1,6 +1,7 @@
 from datetime import date
 
 from pydantic import BaseModel, EmailStr
+from ..jeb_schema import Founder
 
 
 class StartupBase(BaseModel):
@@ -32,3 +33,4 @@ class StartupUpdate(StartupBase):
 
 class StartupOut(StartupBase):
     id: int
+    founders: list[Founder]

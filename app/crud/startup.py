@@ -3,7 +3,9 @@ from typing import Sequence
 from ..endpoints.auth import as_enough_perms, get_user_from_token
 from fastapi import HTTPException, Header, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
 
 from ..models import Startup
 from ..schemas.startup import StartupCreate, StartupUpdate
@@ -25,7 +27,11 @@ async def create_startup(
 
 
 async def get_startup(db: AsyncSession, startup_id: int) -> Startup:
-    result = await db.execute(select(Startup).where(Startup.id == startup_id))
+    result = await db.execute(
+        select(Startup)
+        .where(Startup.id == startup_id)
+        .options(selectinload(Startup.founders))
+    )
     startup = result.scalars().first()
     if not startup:
         raise HTTPException(
@@ -37,7 +43,12 @@ async def get_startup(db: AsyncSession, startup_id: int) -> Startup:
 async def get_startups(
     db: AsyncSession, skip: int = 0, limit: int = 100
 ) -> Sequence[Startup]:
-    result = await db.execute(select(Startup).offset(skip).limit(limit))
+    result = await db.execute(
+        select(Startup)
+        .offset(skip)
+        .limit(limit)
+        .options(selectinload(Startup.founders))
+    )
     return result.scalars().all()
 
 
