@@ -1,4 +1,4 @@
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
@@ -93,7 +93,7 @@ function RegisterForm() {
       body: payload,
       onSuccess: (data) => {
         localStorage.setItem("token", data.token);
-        navigate("/auth/login");
+        navigate("/auth/verify");
       },
       onError: (e) => {
         setError(e);
@@ -107,8 +107,8 @@ function RegisterForm() {
         <FormField
           key={field.name}
           value={formData[field.name as keyof typeof formData]}
-          field={field}
           onChange={handleChange}
+          {...field}
         />
       ))}
 

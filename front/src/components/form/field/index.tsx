@@ -1,43 +1,32 @@
 import PasswordInput from "../password-input";
 
 interface FormFieldProps {
-  field: {
-    name: string;
-    label: string;
-    type: string;
-    placeholder?: string;
-    pattern?: string;
-    title?: string;
-    autocomplete?: string;
-  };
+  name: string;
+  label: string;
+  type: string;
+  placeholder?: string;
+  pattern?: string;
+  title?: string;
+  autocomplete?: string;
+
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function FormField({ field, value, onChange }: FormFieldProps) {
+export default function FormField(props: FormFieldProps) {
   return (
-    <div className="auth-box">
-      <label htmlFor={field.name}>{field.label}</label>
+    <div className="form-box">
+      <label htmlFor={props.name}>{props.label}</label>
 
-      {field.type === "password" ? (
+      {props.type === "password" ? (
         <PasswordInput
-          name={field.name}
-          value={value}
-          onChange={onChange}
-          placeholder={field.placeholder}
+          name={props.name}
+          value={props.value}
+          onChange={props.onChange}
+          placeholder={props.placeholder}
         />
       ) : (
-        <input
-          type={field.type}
-          name={field.name}
-          placeholder={field.placeholder}
-          value={value}
-          onChange={onChange}
-          required
-          pattern={field.pattern}
-          title={field.title}
-          autoComplete={field.autocomplete}
-        />
+        <input {...props} required />
       )}
     </div>
   );

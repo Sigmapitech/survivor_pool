@@ -14,6 +14,7 @@ import CatalogPage from "@/routes/catalog/catalog";
 import Home from "@/routes/home";
 import Image from "@/routes/image";
 import NewsPage from "@/routes/news-feed";
+import VerifyPage from "./routes/auth/verify";
 import DashboardPage from "./routes/dashboard/dashboard";
 import EnterprisePage from "./routes/enterprise/enterprise";
 import ProjectPage from "./routes/project";
@@ -33,6 +34,7 @@ ReactDOM.createRoot(root).render(
 
       <Route path="/auth/login" element={<Login />} />
       <Route path="/auth/register" element={<Register />} />
+      <Route path="/auth/verify" element={<VerifyPage />} />
 
       <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
