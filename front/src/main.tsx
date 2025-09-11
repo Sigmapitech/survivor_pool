@@ -23,6 +23,9 @@ ReactDOM.createRoot(root).render(
     <Routes>
       <Route element={<Main />}>
         <Route index element={<Home />} />
+        <Route path="/news" element={<NewsPage />} />
+        <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
       </Route>
 
       <Route path="/auth/login" element={<Login />} />
@@ -31,9 +34,6 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
       <Route path="/admin/startup/project-register" element={<Image />} />
-      <Route path="/news" element={<NewsPage />} />
-      <Route path="/catalog" element={<CatalogPage />} />
-      <Route path="/calendar" element={<CalendarPage />} />
     </Routes>
   </BrowserRouter>
 );
