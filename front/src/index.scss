@@ -65,3 +65,19 @@ a {
     rgba(193, 116, 242, 1) 82%
   ) 1;
 }
+
+::selection {
+  color: black !important;
+  -webkit-text-fill-color: black;
+  -moz-text-fill-color: black;
+  background-color: #f18585;
+}
+
+a::selection {
+  background-color: #c174f2;
+}
+
+.material-symbols-outlined {
+  width: 24px;
+  height: 24px;
+}
