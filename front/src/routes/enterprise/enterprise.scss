@@ -16,7 +16,15 @@
     background: #23232a;
     border-radius: 12px;
     padding: 2em;
-    box-shadow: 0 2px 16px #000a;
+    // Replace box-shadow with gradient border
+    border: 1px solid transparent;
+    border-image: linear-gradient(
+      180deg,
+      rgba(246, 174, 174, 1) 0%,
+      rgba(241, 133, 133, 1) 25%,
+      rgba(245, 112, 212, 1) 56%,
+      rgba(193, 116, 242, 1) 82%
+    ) 1;
   }
 
   h2 {
@@ -72,7 +80,15 @@
     justify-content: space-between;
     align-items: center;
     color: #e4bef8;
-    box-shadow: 0 1px 8px #0006;
+    // Replace box-shadow with gradient border
+    border: 1px solid transparent;
+    border-image: linear-gradient(
+      180deg,
+      rgba(246, 174, 174, 1) 0%,
+      rgba(241, 133, 133, 1) 25%,
+      rgba(245, 112, 212, 1) 56%,
+      rgba(193, 116, 242, 1) 82%
+    ) 1;
     button {
       margin-left: 1em;
       background: #c174f2;
