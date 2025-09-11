@@ -10,6 +10,7 @@ import Image from "./routes/image";
 import "./index.scss";
 import StartupCRUDPage from "@/routes/admin/startup-crud";
 import UserCRUDPage from "./routes/admin/user-crud";
+import CalendarPage from "./routes/calendar/calendar";
 import CatalogPage from "./routes/catalog/catalog";
 import NewsPage from "./routes/news-feed";
 
@@ -29,6 +30,7 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/startup/project-register" element={<Image />} />
       <Route path="/news" element={<NewsPage />} />
       <Route path="/catalog" element={<CatalogPage />} />
+      <Route path="/calendar" element={<CalendarPage />} />
     </Routes>
   </BrowserRouter>
 );

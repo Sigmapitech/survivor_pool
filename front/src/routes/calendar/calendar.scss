@@ -1,0 +1,120 @@
+.calendar {
+  padding: 2em;
+  color: #f3eaff;
+  background: #18181a;
+  min-height: 100vh;
+
+  h1 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 2rem;
+    margin-bottom: 1.5em;
+    text-align: center;
+    color: #e4bef8;
+  }
+
+  .calendar-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: center;
+    margin-bottom: 2em;
+
+    input {
+      background: #23232a;
+      color: #e4bef8;
+      border: 1px solid #31343c;
+      border-radius: 6px;
+      padding: 0.7em 1em;
+      font-size: 1em;
+      outline: none;
+      transition: border 0.2s;
+      &:focus {
+        border-color: #e4bef8;
+      }
+    }
+  }
+
+  .calendar-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2em;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .calendar-card {
+    background: #23232a;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px #000a;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.2s;
+    border: 1px solid #31343c;
+
+    &:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: #e4bef8;
+    }
+
+    .calendar-card-meta {
+      padding: 1.5em;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7em;
+
+      h2 {
+        font-size: 1.3rem;
+        margin: 0;
+        color: #e4bef8;
+        font-family: "Montserrat", sans-serif;
+      }
+      .type {
+        font-size: 1em;
+        color: #f18585;
+        font-weight: bold;
+      }
+      .dates {
+        font-size: 0.95em;
+        color: #c174f2;
+      }
+      .location {
+        font-size: 0.95em;
+        color: #e4bef8;
+      }
+      p {
+        font-size: 1rem;
+        color: #c174f2;
+        margin: 0.5em 0 0 0;
+        flex: 1;
+      }
+      .audience {
+        font-size: 0.95em;
+        color: #f18585;
+        margin-top: 0.5em;
+      }
+    }
+  }
+
+  .empty {
+    text-align: center;
+    color: #f18585;
+    font-size: 1.2em;
+    margin-top: 2em;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .calendar {
+    padding: 1em;
+    .calendar-list {
+      grid-template-columns: 1fr;
+      gap: 1em;
+    }
+    .calendar-card-meta {
+      padding: 1em;
+    }
+  }
+}
