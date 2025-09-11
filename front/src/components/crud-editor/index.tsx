@@ -57,7 +57,7 @@ export default function CrudTable<T extends { id: number }>({
     if (res.ok) {
       const updated: T = await res.json();
 
-      updated[idField] = Number(updated[idField]); // TODO: fixup
+      updated[idField] = Number(updated[idField]) as T[keyof T];
       setData((prev) =>
         prev.map((row) => (row[idField] === updated[idField] ? updated : row))
       );
