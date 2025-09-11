@@ -1,8 +1,13 @@
+from http import HTTPStatus
+import uvicorn
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+import os
 import logging
 import sys
 from contextlib import asynccontextmanager
 
-import uvicorn
+from starlette.responses import FileResponse, JSONResponse
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -45,8 +50,25 @@ def log_routes(app: FastAPI):
 
 log_routes(app)
 
-
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
+# v- fixup for prod serve:
+
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_404_handler(request, exc: StarletteHTTPException):
+    if exc.status_code == HTTPStatus.NOT_FOUND.value:
+        if request.url.path.startswith("/api/"):
+            return JSONResponse(
+                status_code=HTTPStatus.NOT_FOUND.value,
+                content={"detail": "API endpoint not found"},
+            )
+
+        index_file = os.path.join("front/dist", "index.html")
+        return FileResponse(index_file)
+
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 
 def main():
