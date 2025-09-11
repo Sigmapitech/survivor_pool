@@ -14,6 +14,7 @@ import CatalogPage from "@/routes/catalog/catalog";
 import Home from "@/routes/home";
 import Image from "@/routes/image";
 import NewsPage from "@/routes/news-feed";
+import EnterprisePage from "./routes/enterprise/enterprise";
 import ProjectPage from "./routes/project";
 
 const root = document.getElementById("root");
@@ -36,6 +37,7 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
       <Route path="/admin/startup/project-register" element={<Image />} />
       <Route path="/projectpage" element={<ProjectPage id={2} />} />
+      <Route path="/enterprise" element={<EnterprisePage />} />
     </Routes>
   </BrowserRouter>
 );

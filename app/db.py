@@ -68,7 +68,7 @@ async def init_db():
                 email=admin_email,
                 name=admin_name,
                 authentication_string=bcrypt.hash(admin_password),
-                role="admin",
+                role="ADMIN",
             )
             session.add(admin_user)
             await session.commit()
