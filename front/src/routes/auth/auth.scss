@@ -12,6 +12,7 @@
     align-items: center;
 
     a {
+      display: flex;
       font-size: 1.5rem;
     }
 
@@ -92,15 +93,6 @@
     color: #f18585;
     font-size: 1rem;
     text-align: center;
-  }
-
-  .btn-validate {
-    background: #c174f2;
-    color: black;
-
-    &:hover {
-      background: #E4BEF8;
-    }
   }
 
   .actions {

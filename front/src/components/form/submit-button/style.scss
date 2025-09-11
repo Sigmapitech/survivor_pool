@@ -1,0 +1,11 @@
+.btn-validate {
+  width: 100%;
+  border: 2px solid transparent;
+  padding: .5rem;
+  background: #c174f2;
+  color: black;
+
+  &:hover {
+    background: #E4BEF8;
+  }
+}

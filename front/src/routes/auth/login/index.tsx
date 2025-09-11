@@ -5,7 +5,10 @@ import { Link, useNavigate } from "react-router";
 import "../auth.scss";
 
 import { API_BASE_URL } from "@/api_url.ts";
-import PasswordInput from "@/components/auth/passwordInput";
+import PasswordInput from "@/components/form/password-input";
+import FormSubmitButton, {
+  handleFormSubmit,
+} from "@/components/form/submit-button";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -13,37 +16,27 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid credentials");
-      }
-
-      const data = await response.json();
-
-      localStorage.setItem("token", data.token);
-
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err?.message);
-    }
+    handleFormSubmit({
+      url: `${API_BASE_URL}/api/auth/login`,
+      body: { email, password },
+      onSuccess: (data) => {
+        localStorage.setItem("token", data.token);
+        navigate("/dashboard");
+      },
+      onError: (err) => setError(err),
+    });
   };
 
   return (
     <div className="auth">
       <div className="auth-header">
-        <Link to="/">←</Link>
+        <Link to="/">
+          <span className="material-symbols-outlined">arrow_left_alt</span>
+        </Link>
         <h1>Sign In to Jeb-Incubator</h1>
       </div>
 
@@ -70,7 +63,7 @@ export default function LoginPage() {
         {error && <p className="error">{error}</p>}
 
         <div className="actions">
-          <input className="btn btn-validate" type="submit" value="Sign in" />
+          <FormSubmitButton value="Sign in" submitCallback={handleSubmit} />
         </div>
       </form>
       <Link to="/auth/register">Create an account</Link>

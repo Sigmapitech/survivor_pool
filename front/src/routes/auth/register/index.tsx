@@ -6,11 +6,10 @@ import { API_BASE_URL } from "@/api_url";
 
 import "../auth.scss";
 
-interface ValidationErrorItem {
-  loc: (string | number)[];
-  msg: string;
-  type: string;
-}
+import FormField from "@/components/form/field";
+import FormSubmitButton, {
+  handleFormSubmit,
+} from "@/components/form/submit-button";
 
 const REGISTRATION_FIELDS = [
   {
@@ -84,64 +83,43 @@ function RegisterForm() {
       return;
     }
 
-    try {
-      const payload = {
-        name: username,
-        email,
-        password,
-        invitation_code: invitation,
-      };
+    const payload = {
+      name: username,
+      email,
+      password,
+      invitation_code: invitation,
+    };
 
-      const response = await fetch(`${API_BASE_URL}/api/auth/register/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        if (data.detail && Array.isArray(data.detail)) {
-          const messages = data.detail
-            .map((d: ValidationErrorItem) => d.msg)
-            .join(", ");
-          throw new Error(messages);
-        } else {
-          throw new Error(data.message || "Registration failed");
-        }
-      }
-
-      navigate("/auth/login");
-    } catch (err) {
-      if (err instanceof Error) setError(err.message);
-      else setError("An unexpected error occurred");
-    }
+    handleFormSubmit({
+      url: `${API_BASE_URL}/api/auth/register/`,
+      body: payload,
+      onSuccess: (data) => {
+        localStorage.setItem("token", data.token);
+        navigate("/auth/login");
+      },
+      onError: (e) => {
+        setError(e);
+      },
+    });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       {REGISTRATION_FIELDS.map((field) => (
-        <div className="auth-box" key={field.name}>
-          <label htmlFor={field.name}>{field.label}</label>
-          <input
-            type={field.type}
-            name={field.name}
-            placeholder={field.placeholder}
-            value={formData[field.name as keyof typeof formData]}
-            onChange={handleChange}
-            required
-            pattern={field.pattern}
-            title={field.title}
-          />
-        </div>
+        <FormField
+          key={field.name}
+          value={formData[field.name as keyof typeof formData]}
+          field={field}
+          onChange={handleChange}
+        />
       ))}
 
       {error && <p className="error">{error}</p>}
 
       <div className="actions">
-        <input
-          className="btn btn-validate"
-          type="submit"
+        <FormSubmitButton
           value="Create your account now"
+          submitCallback={handleSubmit}
         />
       </div>
     </form>
@@ -152,7 +130,9 @@ export default function RegisterPage() {
   return (
     <div className="auth">
       <div className="auth-header">
-        <Link to="/">←</Link>
+        <Link to="/">
+          <span className="material-symbols-outlined">arrow_left_alt</span>
+        </Link>
         <h1>Register</h1>
       </div>
 

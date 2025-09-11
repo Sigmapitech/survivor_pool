@@ -6,12 +6,14 @@ interface PasswordInputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
+  placeholder?: string;
 }
 
 export default function PasswordInput({
   value,
   onChange,
   name,
+  placeholder,
 }: PasswordInputProps) {
   const [show, setShow] = useState(false);
 
@@ -22,6 +24,7 @@ export default function PasswordInput({
         name={name}
         value={value}
         onChange={onChange}
+        placeholder={placeholder}
         required
       />
       <button
