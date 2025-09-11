@@ -17,32 +17,36 @@ import EnterprisePage from "@/routes/enterprise/enterprise";
 import Home from "@/routes/home";
 import NewsPage from "@/routes/news-feed";
 import NotFoundPage from "@/routes/not-found";
+import CustomCursor from "./components/cursor";
 import ProjectPage from "./routes/project";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Root element not found");
 
 ReactDOM.createRoot(root).render(
-  <BrowserRouter>
-    <Routes>
-      <Route element={<Main />}>
-        <Route index element={<Home />} />
-        <Route path="/news" element={<NewsPage />} />
-        <Route path="/catalog" element={<CatalogPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/enterprise" element={<EnterprisePage />} />
-      </Route>
+  <>
+    <CustomCursor />
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Main />}>
+          <Route index element={<Home />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/catalog" element={<CatalogPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/enterprise" element={<EnterprisePage />} />
+        </Route>
 
-      <Route path="/auth/login" element={<Login />} />
-      <Route path="/auth/register" element={<Register />} />
-      <Route path="/auth/verify" element={<VerifyPage />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/register" element={<Register />} />
+        <Route path="/auth/verify" element={<VerifyPage />} />
 
-      <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
-      <Route path="/admin/user-crud" element={<UserCRUDPage />} />
-      <Route path="/projectpage/:id" element={<ProjectPage />} />
+        <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
+        <Route path="/admin/user-crud" element={<UserCRUDPage />} />
+        <Route path="/projectpage/:id" element={<ProjectPage />} />
 
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  </BrowserRouter>
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </BrowserRouter>
+  </>
 );

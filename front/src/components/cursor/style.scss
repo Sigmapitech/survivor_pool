@@ -1,0 +1,23 @@
+html, body {
+  cursor: none;
+}
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  transform: translate3d(-9999px,-9999px,0);
+  transform-origin: center;
+  transition: width 150ms ease, height 150ms ease, opacity 180ms ease, transform 80ms ease;
+  background-color: #0007;
+  z-index: 9999;
+  opacity: 0;
+  display: block;
+  will-change: transform, border-width, width, height, opacity;
+  aspect-ratio: 1/1;
+  border-radius: 20px;
+  border: 2px solid #f18585;
+}
