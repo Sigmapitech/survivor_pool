@@ -25,6 +25,18 @@ h1, h2, h3, h4, h5 {
   font-family: "Montserrat", sans-serif;
 }
 
+h1 {
+  color: #f18585;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  letter-spacing: 1px;
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  text-align: center;
+  text-wrap: nowrap;
+}
+
 a {
   position: relative;
   text-decoration: none;
@@ -35,7 +47,13 @@ a {
     color: #f18585;
   }
 
+  &::selection {
+    background-color: #c174f2;
+  }
+
   &.dash-in {
+    padding: .75em;
+
     &::after {
       content: '';
       position: absolute;
@@ -45,7 +63,7 @@ a {
       width: 0%;
       bottom: 0.25em;
       background-color: #f18585;
-      transition: width 0.3s ease-in-out;
+      transition: width 0.2s ease-in-out;
     }
 
     &:hover::after {
@@ -55,7 +73,7 @@ a {
 }
 
 .gradient-card {
-  background-color: #0d0d1a;
+  background: #0d0d17;
   border: 1px solid transparent;
   box-shadow: 0 0 12px 8px rgb(0, 0, 0);
   border-image: linear-gradient(
@@ -72,10 +90,6 @@ a {
   -webkit-text-fill-color: black;
   -moz-text-fill-color: black;
   background-color: #f18585;
-}
-
-a::selection {
-  background-color: #c174f2;
 }
 
 .material-symbols-outlined {

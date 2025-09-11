@@ -15,17 +15,6 @@
       display: flex;
       font-size: 1.5rem;
     }
-
-    h1 {
-      color: #f18585;
-      font-family: "Montserrat", sans-serif;
-      letter-spacing: 1px;
-      padding: 1rem 2rem;
-      text-transform: uppercase;
-      font-size: 1.2rem;
-      text-align: center;
-      text-wrap: nowrap;
-    }
   }
 
   form, input {
@@ -57,11 +46,11 @@
     width: 100%;
     border: 2px solid transparent;
     padding: .5rem;
+    background-color: #221f33;
 
     &[type=text],
     &[type=password],
     &[type=email] {
-      background-color: #221f33;
       color: white;
 
       &:focus, &:focus-visible {
@@ -71,13 +60,11 @@
 
       &:-moz-autofill {
         -moz-text-fill-color: #fff;
-        box-shadow: 0 0 0px 1000px #212026 inset;
         transition: background-color 5000s ease-in-out 0s;
       }
 
       &:-webkit-autofill {
         -webkit-text-fill-color: #fff;
-        box-shadow: 0 0 0px 1000px #212026 inset;
         transition: background-color 5000s ease-in-out 0s;
       }
     }

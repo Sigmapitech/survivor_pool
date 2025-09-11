@@ -67,7 +67,7 @@ export default function HomePage() {
             provide visibility into the inspiring journey of entrepreneurs
             shaping the future.
           </p>
-          <Link className="arrow-link" to="/auth/register">
+          <Link className="arrow-link dash-in" to="/auth/register">
             <span className="material-symbols-outlined">rocket_launch</span>
             Enroll your startup & get funds
           </Link>
