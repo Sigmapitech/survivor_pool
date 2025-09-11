@@ -29,7 +29,8 @@ if "dev" in sys.argv:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
+else:
+    app.mount("/", StaticFiles(directory="front/dist", html=True), name="dist")
 
 endpoints.register_all(app)
 

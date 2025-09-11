@@ -36,7 +36,7 @@ export default function ImageForm() {
 
       localStorage.setItem("token", data.token);
     } catch (err) {
-      setError(err?.message);
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 
