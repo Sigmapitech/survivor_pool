@@ -53,3 +53,15 @@ a {
     }
   }
 }
+
+.gradient-line {
+  background: black;
+  border: 1px solid transparent;
+  border-image: linear-gradient(
+    180deg,
+    rgba(246, 174, 174, 1) 0%,
+    rgba(241, 133, 133, 1) 25%,
+    rgba(245, 112, 212, 1) 56%,
+    rgba(193, 116, 242, 1) 82%
+  ) 1;
+}
