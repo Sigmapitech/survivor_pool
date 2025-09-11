@@ -319,10 +319,10 @@ export default function EnterprisePage() {
         <div className="enterprise-list">
           {projects.map((project) => (
             <div className="enterprise-card" key={project.id}>
-              <div>
+              <p>
                 <strong>{project.name}</strong> ({project.description})
-              </div>
-              <div>
+              </p>
+              <div className="edit-actions">
                 <button
                   onClick={() => handleEditProject(project)}
                   type="button"
@@ -403,7 +403,7 @@ export default function EnterprisePage() {
               <div>
                 <strong>{startup.name}</strong> ({startup.sector})
               </div>
-              <div>
+              <div className="edit-actions">
                 <button
                   onClick={() => handleEditStartup(startup)}
                   type="button"

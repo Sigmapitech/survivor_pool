@@ -1,3 +1,9 @@
+.mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
 .calendar {
   padding: 2em;
   color: #f3eaff;
@@ -11,12 +17,19 @@
     color: #e4bef8;
   }
 
-  .calendar-filter {
+  &-filter {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 1em;
     justify-content: center;
     margin-bottom: 2em;
+
+    & > div {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1em;
+    }
 
     input {
       background: #23232a;
@@ -33,7 +46,7 @@
     }
   }
 
-  .calendar-list {
+  &-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2em;
@@ -41,7 +54,7 @@
     align-items: stretch;
   }
 
-  .calendar-card {
+  &-card {
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -52,7 +65,7 @@
       border-color: #e4bef8;
     }
 
-    .calendar-card-meta {
+    &-meta {
       padding: 1.5em;
       flex: 1;
       display: flex;
@@ -110,6 +123,33 @@
     }
     .calendar-card-meta {
       padding: 1em;
+    }
+  }
+}
+
+.rbc {
+  &-today {
+    background-color: #0f0f12;
+  }
+
+  &-off-range {
+    visibility: hidden;
+
+    &-bg {
+      background-color: #101010;
+    }
+  }
+
+  &-toolbar button {
+    color: white !important;
+
+    &.rbc-active {
+      background-color: #0f0f12 !important;
+    }
+
+    &:hover, &:hover.active {
+      color: black !important;
+      background-color: #f18585 !important;
     }
   }
 }

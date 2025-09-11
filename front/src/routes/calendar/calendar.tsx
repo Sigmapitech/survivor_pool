@@ -98,38 +98,39 @@ export default function CalendarPage() {
     <div className="calendar">
       <h1>Upcoming Events</h1>
 
-      {/* Toggle between list/calendar */}
-      <label className="mode-toggle">
-        <input
-          type="checkbox"
-          checked={calendarMode}
-          onChange={(e) => setCalendarMode(e.target.checked)}
-        />
-        {calendarMode ? "Calendar View" : "List View"}
-      </label>
-
       {/* Filters */}
       <form className="calendar-filter">
-        <input
-          type="text"
-          placeholder="Filter by name"
-          value={filter.name}
-          onChange={(e) => setFilter((f) => ({ ...f, name: e.target.value }))}
-        />
-        <input
-          type="text"
-          placeholder="Filter by type"
-          value={filter.type}
-          onChange={(e) => setFilter((f) => ({ ...f, type: e.target.value }))}
-        />
-        <input
-          type="text"
-          placeholder="Filter by location"
-          value={filter.location}
-          onChange={(e) =>
-            setFilter((f) => ({ ...f, location: e.target.value }))
-          }
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="Filter by name"
+            value={filter.name}
+            onChange={(e) => setFilter((f) => ({ ...f, name: e.target.value }))}
+          />
+          <input
+            type="text"
+            placeholder="Filter by type"
+            value={filter.type}
+            onChange={(e) => setFilter((f) => ({ ...f, type: e.target.value }))}
+          />
+          <input
+            type="text"
+            placeholder="Filter by location"
+            value={filter.location}
+            onChange={(e) =>
+              setFilter((f) => ({ ...f, location: e.target.value }))
+            }
+          />
+          {/* Toggle between list/calendar */}
+          <label className="mode-toggle">
+            <input
+              type="checkbox"
+              checked={calendarMode}
+              onChange={(e) => setCalendarMode(e.target.checked)}
+            />
+            {calendarMode ? "Calendar View" : "List View"}
+          </label>
+        </div>
       </form>
 
       {/* Render list OR calendar */}
