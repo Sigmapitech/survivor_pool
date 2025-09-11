@@ -63,7 +63,11 @@ export default function EnterprisePage() {
     formData.append("name", projectForm.name);
     formData.append("description", projectForm.description);
     formData.append("worth", projectForm.worth);
-    formData.append("logo", projectForm.logo);
+    if (projectForm.logo !== "") {
+      alert("not supported yet");
+      return;
+      /*formData.append("logo", projectForm.logo);*/
+    }
 
     fetch(url, {
       method,
@@ -173,6 +177,7 @@ export default function EnterprisePage() {
           />
           <input
             type="text"
+            hidden
             placeholder="Logo URL"
             value={projectForm.logo}
             onChange={(e) =>
@@ -229,8 +234,16 @@ export default function EnterprisePage() {
                 <strong>{project.name}</strong> ({project.description})
               </div>
               <div>
-                <button onClick={() => handleEditProject(project)}>Edit</button>
-                <button onClick={() => handleDeleteProject(project.id)}>
+                <button
+                  onClick={() => handleEditProject(project)}
+                  type="button"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteProject(project.id)}
+                  type="button"
+                >
                   Delete
                 </button>
               </div>
@@ -311,8 +324,16 @@ export default function EnterprisePage() {
                 <strong>{startup.name}</strong> ({startup.sector})
               </div>
               <div>
-                <button onClick={() => handleEditStartup(startup)}>Edit</button>
-                <button onClick={() => handleDeleteStartup(startup.id)}>
+                <button
+                  onClick={() => handleEditStartup(startup)}
+                  type="button"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteStartup(startup.id)}
+                  type="button"
+                >
                   Delete
                 </button>
               </div>
