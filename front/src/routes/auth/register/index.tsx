@@ -18,7 +18,7 @@ const REGISTRATION_FIELDS = [
     name: "email",
     type: "email",
     placeholder: "Email",
-    pattern: "^[\\w.-]+@[\\w.-]+\\.\\w{2,}$",
+    pattern: ".+@.+",
     title: "Please enter a valid email address",
   },
   {
@@ -28,14 +28,6 @@ const REGISTRATION_FIELDS = [
     placeholder: "Username",
     pattern: "^[a-zA-Z0-9_]{3,20}$",
     title: "3-20 characters, letters, numbers, underscores only",
-  },
-  {
-    label: "Invitation Code",
-    name: "invitation",
-    type: "text",
-    placeholder: "777 777",
-    pattern: "^\\d{3}\\s\\d{3}$",
-    title: "Format: 777 777",
   },
   {
     label: "Password",
@@ -50,7 +42,7 @@ const REGISTRATION_FIELDS = [
     name: "confirmPassword",
     type: "password",
     placeholder: "Confirm your password",
-    pattern: ".{6,}",
+    pattern: ".{8,}",
     title: "Must match the password",
   },
 ];
