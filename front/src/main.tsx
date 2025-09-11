@@ -14,6 +14,7 @@ import CatalogPage from "@/routes/catalog/catalog";
 import Home from "@/routes/home";
 import Image from "@/routes/image";
 import NewsPage from "@/routes/news-feed";
+import ProjectPage from "./routes/project";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Root element not found");
@@ -34,6 +35,7 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/startup-crud" element={<StartupCRUDPage />} />
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
       <Route path="/admin/startup/project-register" element={<Image />} />
+      <Route path="/projectpage" element={<ProjectPage id={2} />} />
     </Routes>
   </BrowserRouter>
 );
