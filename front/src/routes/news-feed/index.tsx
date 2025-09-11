@@ -50,27 +50,23 @@ export default function NewsPage() {
 
   if (news === null) {
     return (
-      <>
-        <section className="news-feed">
-          <h2>News</h2>
-          <div className="news-list">
-            <p>Loading news...</p>
-          </div>
-        </section>
-      </>
+      <section className="news-feed">
+        <h2>News</h2>
+        <div className="news-list">
+          <p>Loading news...</p>
+        </div>
+      </section>
     );
   }
 
   if (news.length === 0) {
     return (
-      <>
-        <section className="news-feed">
-          <h2>News</h2>
-          <div className="news-list">
-            <p>No news available at the moment.</p>
-          </div>
-        </section>
-      </>
+      <section className="news-feed">
+        <h2>News</h2>
+        <div className="news-list">
+          <p>No news available at the moment.</p>
+        </div>
+      </section>
     );
   }
 
