@@ -10,6 +10,7 @@ import Image from "./routes/image";
 import "./index.scss";
 import StartupCRUDPage from "@/routes/admin/startup-crud";
 import UserCRUDPage from "./routes/admin/user-crud";
+import CatalogPage from "./routes/catalog/catalog";
 import NewsPage from "./routes/news-feed";
 
 const root = document.getElementById("root");
@@ -27,6 +28,7 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/user-crud" element={<UserCRUDPage />} />
       <Route path="/admin/startup/project-register" element={<Image />} />
       <Route path="/news" element={<NewsPage />} />
+      <Route path="/catalog" element={<CatalogPage />} />
     </Routes>
   </BrowserRouter>
 );
