@@ -2,7 +2,7 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
-import "./auth.scss";
+import "../auth.scss";
 
 import { API_BASE_URL } from "@/api_url.ts";
 

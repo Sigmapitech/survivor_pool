@@ -62,7 +62,9 @@
     border: 2px solid transparent;
     padding: 6px;
 
-    &[type=text], [type=password] {
+    &[type=text],
+    &[type=password],
+    &[type=email] {
       background-color: #212026;
       color: white;
     }

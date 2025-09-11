@@ -4,13 +4,60 @@ import { Link, useNavigate } from "react-router";
 
 import { API_BASE_URL } from "@/api_url";
 
+import "../auth.scss";
+
 interface ValidationErrorItem {
   loc: (string | number)[];
   msg: string;
   type: string;
 }
 
-export default function RegisterPage() {
+const REGISTRATION_FIELDS = [
+  {
+    label: "Email",
+    name: "email",
+    type: "email",
+    placeholder: "Email",
+    pattern: "^[\\w.-]+@[\\w.-]+\\.\\w{2,}$",
+    title: "Please enter a valid email address",
+  },
+  {
+    label: "Username",
+    name: "username",
+    type: "text",
+    placeholder: "Username",
+    pattern: "^[a-zA-Z0-9_]{3,20}$",
+    title: "3-20 characters, letters, numbers, underscores only",
+  },
+  {
+    label: "Invitation Code",
+    name: "invitation",
+    type: "text",
+    placeholder: "777 777",
+    pattern: "^\\d{3}\\s\\d{3}$",
+    title: "Format: 777 777",
+  },
+  {
+    label: "Password",
+    name: "password",
+    type: "password",
+    placeholder: "Password",
+    pattern: ".{6,}",
+    title: "Minimum 6 characters",
+  },
+  {
+    label: "Confirm your password",
+    name: "confirmPassword",
+    type: "password",
+    placeholder: "Confirm your password",
+    pattern: ".{6,}",
+    title: "Must match the password",
+  },
+];
+
+function RegisterForm() {
+  const [error, setError] = useState("");
+
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -19,7 +66,6 @@ export default function RegisterPage() {
     confirmPassword: "",
   });
 
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -80,75 +126,47 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="auth">
-      <div className="auth-login-hint">
-        <span>Already have an account?</span>
-        <Link to="/auth/login">Sign in →</Link>
-      </div>
-
-      <h1>Create your account</h1>
-      <p>
-        Per platform policy, users are created on demand by our administrators.
-        If you have been validated for account creation, please enter the code
-        given by your email.
-      </p>
-
-      <form onSubmit={handleSubmit}>
-        {[
-          {
-            label: "Email",
-            name: "email",
-            type: "email",
-            placeholder: "Email",
-          },
-          {
-            label: "Username",
-            name: "username",
-            type: "text",
-            placeholder: "Username",
-          },
-          {
-            label: "Invitation Code",
-            name: "invitation",
-            type: "text",
-            placeholder: "777 777",
-          },
-          {
-            label: "Password",
-            name: "password",
-            type: "password",
-            placeholder: "Password",
-          },
-          {
-            label: "Confirm your password",
-            name: "confirmPassword",
-            type: "password",
-            placeholder: "Confirm your password",
-          },
-        ].map((field) => (
-          <div className="auth-box" key={field.name}>
-            <label htmlFor={field.name}>{field.label}</label>
-            <input
-              type={field.type}
-              name={field.name}
-              placeholder={field.placeholder}
-              value={formData[field.name as keyof typeof formData]}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        ))}
-
-        {error && <p className="error">{error}</p>}
-
-        <div className="actions">
+    <form onSubmit={handleSubmit}>
+      {REGISTRATION_FIELDS.map((field) => (
+        <div className="auth-box" key={field.name}>
+          <label htmlFor={field.name}>{field.label}</label>
           <input
-            className="btn btn-validate"
-            type="submit"
-            value="Create your account now"
+            type={field.type}
+            name={field.name}
+            placeholder={field.placeholder}
+            value={formData[field.name as keyof typeof formData]}
+            onChange={handleChange}
+            required
+            pattern={field.pattern}
+            title={field.title}
           />
         </div>
-      </form>
+      ))}
+
+      {error && <p className="error">{error}</p>}
+
+      <div className="actions">
+        <input
+          className="btn btn-validate"
+          type="submit"
+          value="Create your account now"
+        />
+      </div>
+    </form>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <div className="auth">
+      <div className="auth-header">
+        <Link to="/">←</Link>
+        <h1>Register</h1>
+      </div>
+
+      <RegisterForm />
+
+      <Link to="/auth/login">Already have an account?</Link>
     </div>
   );
 }
