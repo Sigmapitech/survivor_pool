@@ -9,34 +9,37 @@ export interface News {
   category: string;
   startup_id: string;
   description: string;
-  date: Date;
+  news_date: Date;
 }
 
 function Newss({ news }: { news: News }) {
   return (
     <div className="News" key={news.id}>
+      <h3>{news.title}</h3>
+      <p>{news.description}</p>
+      <div className="news-meta">
+        <span>Date: {news.news_date.toString()}</span>
+        <br />
+        <span>Location: {news.location}</span>
+        <br />
+      </div>
       <img
-        src={`${API_BASE_URL}/${news.logo}`}
+        src={`${API_BASE_URL}/api/news/${news.id}/image`}
         alt={news.title}
+        width="600px"
+        height="400px"
         className="news-logo"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).src =
             "https://placehold.co/600x400/EED5FB/31343C";
         }}
       />
-      <h3>{news.title}</h3>
-      <p>{news.description}</p>
-      <div className="news-meta">
-        <span>Date: ${news.date.toString()}</span>
-        <span>Placement: ${news.location}</span>
-        <span>Category: {news.category}</span>
-      </div>
     </div>
   );
 }
 
 export default function NewsPage() {
-  const [news, setNews] = useState<News[] | null>([]);
+  const [news, setNews] = useState<News[] | null>(null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/news/`)
@@ -45,20 +48,60 @@ export default function NewsPage() {
       .catch(console.error);
   }, []);
 
-  return (
-    <>
-      <section className="news-feed">
-        <h2>News</h2>
-        <div className="news-list">
-          {news === null ? (
+  if (news === null) {
+    return (
+      <>
+        <section className="news-feed">
+          <h2>News</h2>
+          <div className="news-list">
             <p>Loading news...</p>
-          ) : news.length === 0 ? (
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  if (news.length === 0) {
+    return (
+      <>
+        <section className="news-feed">
+          <h2>News</h2>
+          <div className="news-list">
             <p>No news available at the moment.</p>
-          ) : (
-            news.map((news) => <Newss key={news.id} news={news} />)
-          )}
-        </div>
-      </section>
-    </>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  const grouped = news.reduce<Record<string, News[]>>((acc, item) => {
+    const category = item.category || "Uncategorized";
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(item);
+    return acc;
+  }, {});
+
+  return (
+    <section className="news-feed space-y-8">
+      <h2>News</h2>
+
+      {Object.entries(grouped).map(([category, items]) => {
+        const sortedItems = [...items].sort(
+          (a, b) =>
+            new Date(b.news_date).getTime() - new Date(a.news_date).getTime()
+        );
+
+        return (
+          <div key={category}>
+            <h3 className="text-xl font-semibold">{category}</h3>
+            <div className="news-list grid grid-cols-3 gap-4">
+              {sortedItems.map((n) => (
+                <Newss key={n.id} news={n} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </section>
   );
 }
