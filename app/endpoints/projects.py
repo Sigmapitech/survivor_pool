@@ -16,14 +16,13 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from ..models.users import User
-
 from ..db import get_session
-from .auth import as_enough_perms, get_user_from_token, get_user_id_from_token
 from ..jeb_schema import UserBase
 from ..models import Project
 from ..models.startups import Startup
+from ..models.users import User
 from ..proxy_schema import Message, ProjectBase
+from .auth import as_enough_perms, get_user_from_token, get_user_id_from_token
 
 router = APIRouter()
 

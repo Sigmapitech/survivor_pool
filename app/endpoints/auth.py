@@ -10,13 +10,12 @@ from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from ..schemas.users import PasswordStr
-
 from ..config import settings
 from ..db import get_session
 from ..helpers.mail import EmailSchema, send_email
 from ..models import User
 from ..proxy_schema import Message
+from ..schemas.users import PasswordStr
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

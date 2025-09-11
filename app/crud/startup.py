@@ -1,12 +1,11 @@
 from typing import Sequence
 
-from ..endpoints.auth import as_enough_perms, get_user_from_token
-from fastapi import HTTPException, Header, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import Header, HTTPException, status
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-
+from ..endpoints.auth import as_enough_perms, get_user_from_token
 from ..models import Startup
 from ..schemas.startup import StartupCreate, StartupUpdate
 

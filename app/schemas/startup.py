@@ -1,6 +1,7 @@
 from datetime import date
 
 from pydantic import BaseModel, EmailStr
+
 from ..jeb_schema import Founder
 
 

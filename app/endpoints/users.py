@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Form, HTTPException, Header, status
+from fastapi import APIRouter, Depends, Form, Header, HTTPException, status
 from pydantic import EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,7 +17,7 @@ from ..jeb_schema import UserBase
 from ..models import User
 from ..proxy_schema import Message
 from ..schemas.users import PatchRequest, UpdateRequest
-from .auth import get_user_from_token, as_enough_perms, PERMS
+from .auth import PERMS, as_enough_perms, get_user_from_token
 
 router = APIRouter()
 

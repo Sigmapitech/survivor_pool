@@ -5,13 +5,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import crud_startup
-from ..schemas.startup import StartupCreate, StartupOut, StartupUpdate
-
 from ..db import get_session
 from ..helpers.caching_proxy import cached_endpoint, cached_list_endpoint, get_image
 from ..jeb_schema import StartupBase
 from ..models import Startup
 from ..proxy_schema import Message
+from ..schemas.startup import StartupCreate, StartupOut, StartupUpdate
 
 router = APIRouter(tags=["startups"])
 

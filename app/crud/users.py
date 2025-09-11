@@ -1,12 +1,12 @@
 from typing import Sequence
 
-from ..endpoints.auth import get_user_from_token
-from fastapi import HTTPException, Header
+from fastapi import Header, HTTPException
 from passlib.hash import bcrypt
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from ..endpoints.auth import get_user_from_token
 from ..models import User
 from ..schemas.users import PatchRequest, UpdateRequest
 
