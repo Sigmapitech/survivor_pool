@@ -53,9 +53,9 @@ async def init_db():
 
     async with async_session() as session:
         # TODO: remove
-        admin_email = "sg@a.b"
-        admin_name = "sg"
-        admin_password = "o"
+        admin_email = "admin@demo.com"
+        admin_name = "Admin"
+        admin_password = "qwertyuiop"
 
         from .models import User
 

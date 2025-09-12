@@ -10,7 +10,7 @@ BASE_URL = "http://localhost:8000/api"
 FRONT_BASE_URL = "http://localhost:5173/"
 PROJECTS_FILE = Path("projects.json")
 
-EMAIL = "sg@a.b"
+EMAIL = "admin@demo.com"
 
 
 def login():
